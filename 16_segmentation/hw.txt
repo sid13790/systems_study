@@ -1,0 +1,101 @@
+1.
+
+segmentation.py -a 128 -p 512 -b 0 -l 20 -B 512 -L 20 -s 0
+===
+ARG seed 0
+ARG address space size 128
+ARG phys mem size 512
+
+Segment register information:
+
+  Segment 0 base  (grows positive) : 0x00000000 (decimal 0)
+  Segment 0 limit                  : 20
+
+  Segment 1 base  (grows negative) : 0x00000200 (decimal 512)
+  Segment 1 limit                  : 20
+
+Virtual Address Trace
+  VA  0: 0x0000006c (decimal:  108) --> PA or segmentation violation? 0x1EC
+
+0x0000006c = 0b01101100
+maximum segment size = 0b1111111 + 0b1 = 63 + 1 = 64 
+# note: remember to calculate segment size based on address space size and 
+# number of segments
+seg 1: offset = 0b00101100 = 0x2C = 44, adjusted = 64 - 44 = 20
+seg 1 address = 128 - 20 = 108
+
+  VA  1: 0x00000061 (decimal:   97) --> PA or segmentation violation? seg 1 SV
+  VA  2: 0x00000035 (decimal:   53) --> PA or segmentation violation? seg 0 SV
+  VA  3: 0x00000021 (decimal:   33) --> PA or segmentation violation? seg 0 SV
+  VA  4: 0x00000041 (decimal:   65) --> PA or segmentation violation? seg 1 SV
+
+
+segmentation.py -a 128 -p 512 -b 0 -l 20 -B 512 -L 20 -s 1
+===
+ARG seed 1
+ARG address space size 128
+ARG phys mem size 512
+
+Segment register information:
+
+  Segment 0 base  (grows positive) : 0x00000000 (decimal 0)
+  Segment 0 limit                  : 20
+
+  Segment 1 base  (grows negative) : 0x00000200 (decimal 512)
+  Segment 1 limit                  : 20
+
+Virtual Address Trace
+  VA  0: 0x00000011 (decimal:   17) --> PA or segmentation violation? 0x011
+  VA  1: 0x0000006c (decimal:  108) --> PA or segmentation violation? 0x1EC
+  VA  2: 0x00000061 (decimal:   97) --> PA or segmentation violation? seg 1 SV
+  VA  3: 0x00000020 (decimal:   32) --> PA or segmentation violation? seg 0 SV
+  VA  4: 0x0000003f (decimal:   63) --> PA or segmentation violation? seg 0 SV
+
+
+segmentation.py -a 128 -p 512 -b 0 -l 20 -B 512 -L 20 -s 2
+===
+ARG seed 2
+ARG address space size 128
+ARG phys mem size 512
+
+Segment register information:
+
+  Segment 0 base  (grows positive) : 0x00000000 (decimal 0)
+  Segment 0 limit                  : 20
+
+  Segment 1 base  (grows negative) : 0x00000200 (decimal 512)
+  Segment 1 limit                  : 20
+
+Virtual Address Trace
+  VA  0: 0x0000007a (decimal:  122) --> PA or segmentation violation? 0x1FA
+  VA  1: 0x00000079 (decimal:  121) --> PA or segmentation violation? 0x1F9
+  VA  2: 0x00000007 (decimal:    7) --> PA or segmentation violation? 0x007
+  VA  3: 0x0000000a (decimal:   10) --> PA or segmentation violation? 0x00a
+  VA  4: 0x0000006a (decimal:  106) --> PA or segmentation violation? seg 1 SV
+
+
+2.
+
+highest legal VA in seg 0 = 19
+lowest legal VA in seg 1 = 108
+
+lowest illegal address in this VS = 20
+highest illegal address in this VS = 107
+
+./segmentation.py -a 128 -p 512 -b 0 -l 20 -B 512 -L 20 -s 2 -A 19,20,107,108 -c
+
+3.
+
+b0: x
+l0: 2
+b1: x + (at least 16)
+l1: 2
+
+4.
+
+I'd want the limits to be very forgiving, i.e. make it so that the limit is 90% 
+of the segment size for each segment.
+
+5.
+
+Just make the limits 0 lol.
