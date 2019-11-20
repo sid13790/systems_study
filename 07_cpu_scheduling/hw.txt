@@ -1,0 +1,35 @@
+1.
+
+response times = 0, 200, 400 respectively
+turnaround time = 200, 400, 600 respectively
+
+2.
+
+response times = 0, 100, 300 respectively
+turnaround times = 100, 300, 600 respectively
+
+3.
+
+response times = 0, 1, 2 respectively
+turnaround times = 298, 499, 600 
+
+4.
+
+Workloads where the job lengths are the same, or jobs are in ascending
+order by length.
+
+5.
+
+Workloads where the quantum length is the same length as the job length, and 
+the job lengths are the same.
+
+6. 
+
+The response time increases with respect to the first job, since the first job
+has the most effect on response time for all subsequent jobs. 
+
+7. 
+
+The response time increases for each job. 
+The worst case response time with respect to N is (N - 1) * q
+The average response time is ((N - 1) * q) / 2
