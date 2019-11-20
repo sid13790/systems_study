@@ -1,0 +1,69 @@
+1.
+
+it segfaults
+
+2.
+
+Program received signal SIGSEGV, Segmentation fault.
+0x0000555555554665 in main (argc=1, argv=0x7fffffffdda8) at null.c:6
+6           int val = *ptr;
+
+3.
+
+==30050== Invalid read of size 4
+==30050==    at 0x108665: main (null.c:6)
+==30050==  Address 0x0 is not stack'd, malloc'd or (recently) free'd
+
+it's trying to access memory that isn't allocated, so it segfaults
+
+4.
+
+gdb returns normally, valgrind returns the following:
+
+==30389== HEAP SUMMARY:
+==30389==     in use at exit: 4 bytes in 1 blocks
+==30389==   total heap usage: 2 allocs, 1 frees, 1,028 bytes allocated
+==30389== 
+==30389== 4 bytes in 1 blocks are definitely lost in loss record 1 of 1
+==30389==    at 0x4C2FB0F: malloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==30389==    by 0x1086A2: main (no_free.c:5)
+
+5.
+
+valgrind returns:
+
+==31443== Invalid write of size 4
+==31443==    at 0x1086B1: main (size_100.c:6)
+==31443==  Address 0x522d1d0 is 224 bytes inside an unallocated block of size 4,194,032 in arena "client"
+
+since it's trying to write at 100, which isn't allocated
+
+6.
+
+valgrind returns:
+
+==31297== Invalid read of size 4
+==31297==    at 0x10870B: main (post_free.c:9)
+==31297==  Address 0x522d0a4 is 100 bytes inside a block of size 400 free'd
+==31297==    at 0x4C30D3B: free (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31297==    by 0x108702: main (post_free.c:7)
+==31297==  Block was alloc'd at
+==31297==    at 0x4C2FB0F: malloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31297==    by 0x1086F2: main (post_free.c:5)
+==31297== 
+
+because it's trying to access memory that was freed
+
+7.
+
+valgrind returns this:
+
+==31624== HEAP SUMMARY:
+==31624==     in use at exit: 400 bytes in 1 blocks
+==31624==   total heap usage: 1 allocs, 1 frees, 400 bytes allocated
+==31624== 
+==31624== 400 bytes in 1 blocks are definitely lost in loss record 1 of 1
+==31624==    at 0x4C2FB0F: malloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31624==    by 0x1086A2: main (funny_free.c:5)
+
+because it didn't free the whole block of memory

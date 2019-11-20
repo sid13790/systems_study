@@ -1,0 +1,106 @@
+1.
+
+The job will run for 30 units of time, since the cache can't handle the working
+set, the cache will never be warm, even though it takes 10 units to warm up and
+the job takes 30 units.
+
+2. 
+
+The job will run for 20 units of time. It'll take 10 units to warm up the cache,
+then 10 units (20/2) units to run the rest of the job once the cache is warm.
+
+3. 
+
+The time goes down by 2 each tick in the second half of the trace.
+
+4. 
+
+The cache becomes warm after time tick 9 (10th time unit). A lower warmup time results in a
+faster job run time, and vice versa for a higher warmup time.
+
+5.
+
+1 | aa cc bb aa cc bb aa cc bb aa cc bb aa cc bb 
+------------------------------------------------
+2 | bb aa cc bb aa cc bb aa cc bb aa cc bb aa cc
+
+The cache warms up, but cools down after, so the cache is never used when warm.
+
+6.
+
+1 | aa aa aa aa aa a
+------------------------------------------------
+2 | bb cc bb cc bb cc bb cc bc
+
+a finishes in 55 (10 + 45)
+b and c finish in 110 (10 + 10 + 45 + 45)
+
+it does better because the cache has a chance to become warm, and be used while
+warm, for both CPUs.
+
+No other combination will provide a better speedup.
+
+7. 
+
+CPUs - 1, cache size - 50
+
+a b c a b c a b c a b c a b c a b c a b c a b c a b c a b c
+
+CPUs - 2, cache size - 50
+
+a c b a c b a c b a c b a c b a c b a c b a c b a c b a c b
+b a c b a c b a c b a c b a c b a c b a c b a c b a c b a c
+
+CPUs - 3, cache size - 50
+
+a a a a a a a a a a
+b b b b b b b b b b
+c c c c c c c c c c
+
+CPUs - 1, cache size - 100
+
+a b c a b c a b c a b c a b c a b c a b c a b c a b c a b c
+
+CPUs - 2, cache size - 100
+
+a c b a c b a c b a c b a c b a c b a c b a c b a c b a c b
+b a c b a c b a c b a c b a c b a c b a c b a c b a c b a c
+
+CPUs - 3, cache size - 100
+
+a a a a a a
+b b b b b b
+c c c c c c
+
+Performance got better at 3 CPUs once the cache could handle the load.
+
+$ ./multi.py -n 1 -L a:100:100,b:100:100,c:100:100 -M 50 -c -t -T -C    // 300 no cache
+$ ./multi.py -n 2 -L a:100:100,b:100:100,c:100:100 -M 50 -c -t -T -C    // 150 no cache
+$ ./multi.py -n 3 -L a:100:100,b:100:100,c:100:100 -M 50 -c -t -T -C    // 100 no cache
+
+$ ./multi.py -n 1 -L a:100:100,b:100:100,c:100:100 -M 100 -c -t -T -C   // 300 no cache
+$ ./multi.py -n 2 -L a:100:100,b:100:100,c:100:100 -M 100 -c -t -T -C   // 150 no cache
+$ ./multi.py -n 3 -L a:100:100,b:100:100,c:100:100 -M 100 -c -t -T -C   // 55, 10 + 90/2
+
+8.
+
+using per-CPU queues made the runtime much better than hand-picking, when 
+considering 2 CPUs.
+
+If the number of CPUs is larger than the number of jobs, then performance can
+go down as one of the CPUs steals a job from a CPU that already has a warm 
+cache.
+
+A higher peek interval causes worse performance. A lower peek interval
+doesn't alter performance, but in a real world scenario would make performance
+worse as peeking takes time.
+
+$ ./multi.py -n 2 -L a:100:100,b:100:100,c:100:100 -p -c -t -T -C    // 100 = 60 + 10 + (100 - 30 - 10)/2 = 60 + 10 + 30
+$ ./multi.py -n 2 -L a:100:100,b:100:100,c:100:100 -p -c -t -T -C -P 10 // 100
+$ ./multi.py -n 2 -L a:100:100,b:100:100,c:100:100 -p -c -t -T -C -P 40 // 115
+$ ./multi.py -n 3 -L a:100:100,b:100:100,c:100:100 -p -c -t -T -C    // 55
+$ ./multi.py -n 4 -L a:100:100,b:100:100,c:100:100 -p -c -t -T -C    // 60
+$ ./multi.py -n 5 -L a:100:100,b:100:100,c:100:100 -p -c -t -T -C    // 55
+
+9.
+

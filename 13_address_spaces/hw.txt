@@ -1,0 +1,59 @@
+1.
+
+              total        used        free      shared  buff/cache   available
+Mem:       16265092     4186124     6386128      485216     5692840    11285972
+Swap:       2097148           0     2097148
+
+
+2.
+
+              total        used        free      shared  buff/cache   available
+Mem:          15883        4033        6304         457        5546       11092
+Swap:          2047           0        2047
+
+16 GB of total memory, 6 GB free
+
+3.
+
+see memory-user.c
+
+4.
+
+Nothing noticable, too many processes going on to see a noticable difference.
+
+5.
+
+.
+
+6.
+
+The memory somewhat matches.
+
+7.
+
+27889:   ./memory-user 4
+         Address Perm   Offset Device    Inode Size  Rss Pss Referenced Anonymous LazyFree ShmemPmdMapped Shared_Hugetlb Private_Hugetlb Swap SwapPss Locked Mapping
+    56342a968000 r-xp 00000000 103:01 27658400    4    4   4          4         0        0              0              0               0    0       0      0 memory-user
+    56342ab68000 r--p 00000000 103:01 27658400    4    4   4          4         4        0              0              0               0    0       0      0 memory-user
+    56342ab69000 rw-p 00001000 103:01 27658400    4    4   4          4         4        0              0              0               0    0       0      0 memory-user
+    56342c745000 rw-p 00000000  00:00        0  132    4   4          4         4        0              0              0               0    0       0      0 [heap]
+    7f93f24c5000 r-xp 00000000 103:01 12456461 1948 1248  12       1248         0        0              0              0               0    0       0      0 libc-2.27.so
+    7f93f26ac000 ---p 001e7000 103:01 12456461 2048    0   0          0         0        0              0              0               0    0       0      0 libc-2.27.so
+    7f93f28ac000 r--p 001e7000 103:01 12456461   16   16  16         16        16        0              0              0               0    0       0      0 libc-2.27.so
+    7f93f28b0000 rw-p 001eb000 103:01 12456461    8    8   8          8         8        0              0              0               0    0       0      0 libc-2.27.so
+    7f93f28b2000 rw-p 00000000  00:00        0   16   12  12         12        12        0              0              0               0    0       0      0 
+    7f93f28b6000 r-xp 00000000 103:01 12456433  156  156   1        156         0        0              0              0               0    0       0      0 ld-2.27.so
+    7f93f2ab3000 rw-p 00000000  00:00        0    8    8   8          8         8        0              0              0               0    0       0      0 
+    7f93f2add000 r--p 00027000 103:01 12456433    4    4   4          4         4        0              0              0               0    0       0      0 ld-2.27.so
+    7f93f2ade000 rw-p 00028000 103:01 12456433    4    4   4          4         4        0              0              0               0    0       0      0 ld-2.27.so
+    7f93f2adf000 rw-p 00000000  00:00        0    4    4   4          4         4        0              0              0               0    0       0      0 
+    7ffd20a56000 rw-p 00000000  00:00        0 4104   12  12         12        12        0              0              0               0    0       0      0 [stack]
+    7ffd20eb8000 r--p 00000000  00:00        0   12    0   0          0         0        0              0              0               0    0       0      0 [vvar]
+    7ffd20ebb000 r-xp 00000000  00:00        0    8    4   0          4         0        0              0              0               0    0       0      0 [vdso]
+ffffffffff600000 r-xp 00000000  00:00        0    4    0   0          0         0        0              0              0               0    0       0      0 [vsyscall]
+                                               ==== ==== === ========== ========= ======== ============== ============== =============== ==== ======= ====== 
+                                               8484 1492  97       1492        80        0              0              0               0    0       0      0 KB 
+
+8.
+
+yes
