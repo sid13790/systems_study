@@ -1,0 +1,145 @@
+1.
+
+seed 0
+size 100
+baseAddr 1000
+headerSize 0
+alignment -1
+policy BEST
+listOrder ADDRSORT
+coalesce False
+numOps 10
+range 10
+percentAlloc 50
+allocList 
+compute False
+
+ptr[0] = Alloc(3)  returned 1000 (Searched 1 elements)
+Free List [ Size 1 ]:  [ addr:1003 sz:97 ]
+
+Free(ptr[0]) returned 0
+Free List [ Size 2 ]:  [ addr:1000 sz:3 ] [ addr:1003 sz:97 ]
+
+ptr[1] = Alloc(5)  returned 1003 (Searched 2 elements)
+Free List [ Size 2 ]:  [ addr:1000 sz:3 ] [ addr:1008 sz:92 ] 
+
+Free(ptr[1]) returned 0
+Free List [ Size 3 ]:  [ addr:1000 sz:3 ] [ addr:1003 sz:5 ] [ addr:1008 sz:92 ] 
+
+ptr[2] = Alloc(8)  returned 1008 (Searched 3 elements)
+Free List [ Size 3 ]:  [ addr:1000 sz:3 ] [ addr:1003 sz:5 ] [ addr:1016 sz:84 ] 
+
+Free(ptr[2]) returned 0
+Free List [ Size 4 ]:  [ addr:1000 sz:3 ] [ addr:1003 sz:5 ] [ addr:1008 sz:8 ] [ addr:1016 sz:84 ] 
+
+ptr[3] = Alloc(8)  returned 1008 (Searched 4 elements)
+Free List [ Size 3 ]:  [ addr:1000 sz:3 ] [ addr:1003 sz:5 ] [ addr:1016 sz:84 ] 
+
+Free(ptr[3]) returned 0
+Free List [ Size 4 ]:  [ addr:1000 sz:3 ] [ addr:1003 sz:5 ] [ addr:1008 sz:8 ] [ addr:1016 sz:84 ] 
+
+ptr[4] = Alloc(2)  returned 1000 (Searched 4 elements)
+Free List [ Size 4 ]:  [ addr:1002 sz:1 ] [ addr:1003 sz:5 ] [ addr:1008 sz:8 ] [ addr:1016 sz:84 ] 
+
+ptr[5] = Alloc(7)  returned 1008 (Searched 4 elements)
+Free List [ Size 4 ]:  [ addr:1002 sz:1 ] [ addr:1003 sz:5 ] [ addr:1015 sz:1 ] [ addr:1016 sz:84 ] 
+
+
+
+The free list tends to grow (since there's no coalescing).
+
+
+2.
+
+ptr[0] = Alloc(3)  returned 1000 (Searched 1 elements)
+Free List [ Size 1 ]:  [ addr:1003 sz:97 ]
+
+Free(ptr[0]) returned 0
+Free List [ Size 2 ]:  [ addr:1000 sz:3 ] [ addr:1003 sz:97 ]
+
+ptr[1] = Alloc(5)  returned 1003
+Free List [ Size 2 ]:  [ addr:1000 sz:3 ] [ addr:1008 sz:92 ]
+
+Free(ptr[1]) returned 0
+Free List [ Size 3 ]:  [ addr:1000 sz:3 ] [ addr:1003 sz:5 ] [ addr:1008 sz:92 ]
+
+ptr[2] = Alloc(8)  returned 1008
+Free List [ Size 3 ]:  [ addr:1000 sz:3 ] [ addr:1003 sz:5 ] [ addr:1016 sz:84 ] 
+
+Free(ptr[2]) returned 0
+Free List [ Size 4 ]:  [ addr:1000 sz:3 ] [ addr:1003 sz:5 ] [ addr:1008 sz:8 ] [ addr:1016 sz:84 ] 
+
+ptr[3] = Alloc(8)  returned ?
+Free List [ Size 4 ]:  [ addr:1000 sz:3 ] [ addr:1003 sz:5 ] [ addr:1008 sz:8 ] [ addr:1024 sz:76 ] 
+
+Free(ptr[3]) returned ?
+Free List [ Size 4 ]:  [ addr:1000 sz:3 ] [ addr:1003 sz:5 ] [ addr:1008 sz:8 ] [ addr:1016 sz:8 ] [ addr:1024 sz:76 ] 
+
+ptr[4] = Alloc(2)  returned ?
+Free List [ Size 4 ]:  [ addr:1000 sz:3 ] [ addr:1003 sz:5 ] [ addr:1008 sz:8 ] [ addr:1016 sz:8 ] [ addr:1026 sz:74 ] 
+
+ptr[5] = Alloc(7)  returned ?
+Free List [ Size 4 ]:  [ addr:1000 sz:3 ] [ addr:1003 sz:5 ] [ addr:1008 sz:8 ] [ addr:1016 sz:8 ] [ addr:1033 sz:67 ] 
+
+
+
+The free list is larger at the end, and more fragmented.
+
+
+3.
+
+ptr[0] = Alloc(3)  returned 1000
+Free List [ Size 1 ]:  [ addr:1003 sz:97 ]
+
+Free(ptr[0]) returned 0
+Free List [ Size 2 ]:  [ addr:1000 sz:3 ] [ addr:1003 sz:97 ]
+
+ptr[1] = Alloc(5)  returned 1003
+Free List [ Size 2 ]:  [ addr:1000 sz:3 ] [ addr:1008 sz:92 ]
+
+Free(ptr[1]) returned 0
+Free List [ Size 3 ]:  [ addr:1000 sz:3 ] [ addr:1003 sz:5 ] [ addr:1008 sz:92 ]
+
+ptr[2] = Alloc(8)  returned ?
+Free List [ Size 3 ]:  [ addr:1000 sz:3 ] [ addr:1003 sz:5 ] [ addr:1016 sz:84 ] 
+
+Free(ptr[2]) returned ?
+Free List [ Size 4 ]:  [ addr:1000 sz:3 ] [ addr:1003 sz:5 ] [ addr:1008 sz:8 ] [ addr:1016 sz:84 ] 
+
+ptr[3] = Alloc(8)  returned ?
+Free List [ Size 3 ]:  [ addr:1000 sz:3 ] [ addr:1003 sz:5 ] [ addr:1016 sz:84 ] 
+
+Free(ptr[3]) returned ?
+Free List [ Size 4 ]:  [ addr:1000 sz:3 ] [ addr:1003 sz:5 ] [ addr:1008 sz:8 ] [ addr:1016 sz:84 ]
+
+ptr[4] = Alloc(2)  returned ?
+Free List [ Size 4 ]:  [ addr:1002 sz:1 ] [ addr:1003 sz:5 ] [ addr:1008 sz:8 ] [ addr:1016 sz:84 ] 
+
+ptr[5] = Alloc(7)  returned ?
+Free List [ Size 4 ]:  [ addr:1002 sz:1 ] [ addr:1003 sz:5 ] [ addr:1015 sz:1 ] [ addr:1016 sz:84 ] 
+
+
+First fit makes the search faster.
+
+4.
+
+Seems like if you sort by size and then do a first fit then it's optimal in 
+terms of search time.
+
+5.
+
+Some allocations fail, and the free list becomes increasingly large.
+With coalescing, the free list is kept small, and every allocation succeeds.
+
+6.
+
+if it's just allocations then the allocations fail after a while. If there are 
+no allocations then the heap just stays free.
+
+7.
+
+You can run allocations without coalescing, and that's almost guaranteed to 
+fragment the space. If you had to have coalescing, though, you would have to
+allocate like this: [1, 1, 1, 1, 1, 1, 1] and then only free every other 
+pointer.
+
