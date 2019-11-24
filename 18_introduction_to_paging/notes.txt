@@ -1,0 +1,42 @@
+0b00111111111111
+
+0b11001000101001
+
+0b00001000101001
+
+3rd page, offset: 553
+
+4096 * 6 + 553 = 25129
+page_size * page_idx + offset = physical address
+
+remember to keep in mind the page size
+
+
+correct answer: VA  0: 00003229 (decimal: 12841) --> 00006229 (25129) [VPN 3]
+
+
+0b00111111111111
+0b01001101101001
+
+in the second page, so invalid
+
+0b00111111111111
+0b01111010000000
+
+in the second page, so invalid
+
+0b00111111111111
+0b10010101010110
+
+in the third page, so invalid
+
+0b00111111111111
+0b11101000011110
+
+offset: 0b101000011110 = 2590
+
+physical page = 6
+
+4096 * 6 + 2590 = 27166
+
+VA  4: 00003a1e (decimal: 14878) --> 00006a1e (27166) [VPN 3]

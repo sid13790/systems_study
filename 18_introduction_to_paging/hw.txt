@@ -1,0 +1,103 @@
+1.
+
+-P 1k -a 1m -p 512m -v -n 0 = 1024 pages, 10 bits for page, 10 bits for offset
+-P 1k -a 2m -p 512m -v -n 0 = 2048 pages, 11 bits for page, 10 bits for offset
+-P 1k -a 4m -p 512m -v -n 0 = 4096 pages, 12 bits for page, 10 bits for offset
+
+num_pages = address_space_size / page_size
+
+-P 2k -a 1m -p 512m -v -n 0 = 512 pages, 10 bits for page, 11 bits for offset
+-P 4k -a 1m -p 512m -v -n 0 = 512 pages, 10 bits for page, 12 bits for offset
+
+We don't want to use big pages because that would mean the offset would take up
+more bits, which is something we don't want if the address space is large and 
+requires more pages.
+
+2.
+
+-P 1k -a 16k -p 32k -v -u 0
+
+ARG seed 0
+ARG address space size 16k
+ARG phys mem size 32k
+ARG page size 1k
+ARG verbose True
+ARG addresses -1
+
+
+The format of the page table is simple:
+The high-order (left-most) bit is the VALID bit.
+  If the bit is 1, the rest of the entry is the PFN.
+  If the bit is 0, the page is not valid.
+Use verbose mode (-v) if you want to print the VPN # by
+each entry of the page table.
+
+Page Table (from entry 0 down to the max size)
+  [       0]   0x00000000
+  [       1]   0x00000000
+  [       2]   0x00000000
+  [       3]   0x00000000
+  [       4]   0x00000000
+  [       5]   0x00000000
+  [       6]   0x00000000
+  [       7]   0x00000000
+  [       8]   0x00000000
+  [       9]   0x00000000
+  [      10]   0x00000000
+  [      11]   0x00000000
+  [      12]   0x00000000
+  [      13]   0x00000000
+  [      14]   0x00000000
+  [      15]   0x00000000
+
+Virtual Address Trace
+  VA 0x00003a39 (decimal:    14905) --> PA or invalid address? VPN 14 not valid
+
+  0b1110 1000111001
+  0b1110 = 14
+
+  VA 0x00003ee5 (decimal:    16101) --> PA or invalid address? VPN 15 not valid
+
+  0b1111 1011100101
+  0b1111 = 15
+
+  VA 0x000033da (decimal:    13274) --> PA or invalid address? VPN 12 not valid
+
+  0b1100 1111011010
+  0b1100 = 12
+
+  VA 0x000039bd (decimal:    14781) --> PA or invalid address? VPN 14 not valid
+
+  0b11100110111101
+  0b1110 = 14
+
+  VA 0x000013d9 (decimal:     5081) --> PA or invalid address? VPN 4 not valid
+
+  0b01001111011001
+  0b0100 = 4
+
+For each virtual address, write down the physical address it translates to
+OR write down that it is an out-of-bounds address (e.g., segfault).
+
+
+-P 1k -a 16k -p 32k -v -u 25
+-P 1k -a 16k -p 32k -v -u 50
+-P 1k -a 16k -p 32k -v -u 75
+-P 1k -a 16k -p 32k -v -u 100
+
+The number of invalid addresses goes down (i.e. more pages are valid).
+
+3.
+
+-P 8  -a 32   -p 1024 -v -s 1
+-P 8k -a 32k  -p 1m   -v -s 2
+-P 1m -a 256m -p 512m -v -s 3
+
+
+The third one has too many pages in an address space. It takes 8 bits just to 
+find the page we're looking for.
+
+4.
+
+If the page size is really small, and the address space is really big, the 
+program hangs.
