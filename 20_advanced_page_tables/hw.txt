@@ -1,0 +1,14 @@
+1.
+
+2 levels require 1 register
+3 levels require the same amount
+
+2.
+
+see program
+
+3.
+
+the initial access to the PDE will be slow, but get faster over time. For PTEs,
+it depends on where exactly the entries are located, and if they are in the same
+page or not.
