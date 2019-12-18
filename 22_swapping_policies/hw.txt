@@ -1,0 +1,175 @@
+1. (not gonna do it for s1 and s2 for space lmao)
+
+swarajd@swarajd-travel:~/prog/systems/3ep/22_swapping_policies$ ./paging-policy.py -s 0 -n 10
+ARG addresses -1
+ARG addressfile 
+ARG numaddrs 10
+ARG policy FIFO
+ARG clockbits 2
+ARG cachesize 3
+ARG maxpage 10
+ARG seed 0
+ARG notrace False
+
+Assuming a replacement policy of FIFO, and a cache of size 3 pages,
+figure out whether each of the following page references hit or miss
+in the page cache.
+
+Access: 8  Hit/Miss?  State of Memory? MISS, [8]
+Access: 7  Hit/Miss?  State of Memory? MISS, [8, 7]
+Access: 4  Hit/Miss?  State of Memory? MISS, [8, 7, 4]
+Access: 2  Hit/Miss?  State of Memory? MISS, [7, 4, 2]
+Access: 5  Hit/Miss?  State of Memory? MISS, [4, 2, 5]
+Access: 4  Hit/Miss?  State of Memory? HIT,  [4, 2, 5]
+Access: 7  Hit/Miss?  State of Memory? MISS, [2, 5, 7]
+Access: 3  Hit/Miss?  State of Memory? MISS, [5, 7, 3]
+Access: 4  Hit/Miss?  State of Memory? MISS, [7, 3, 4]
+Access: 5  Hit/Miss?  State of Memory? MISS, [3, 4, 5]
+
+swarajd@swarajd-travel:~/prog/systems/3ep/22_swapping_policies$ ./paging-policy.py -s 0 -n 10 -p LRU
+ARG addresses -1
+ARG addressfile 
+ARG numaddrs 10
+ARG policy LRU
+ARG clockbits 2
+ARG cachesize 3
+ARG maxpage 10
+ARG seed 0
+ARG notrace False
+
+Assuming a replacement policy of LRU, and a cache of size 3 pages,
+figure out whether each of the following page references hit or miss
+in the page cache.
+
+Access: 8  Hit/Miss?  State of Memory? MISS, [8]
+Access: 7  Hit/Miss?  State of Memory? MISS, [8, 7]
+Access: 4  Hit/Miss?  State of Memory? MISS, [8, 7, 4] 
+Access: 2  Hit/Miss?  State of Memory? MISS, [7, 4, 2]
+Access: 5  Hit/Miss?  State of Memory? MISS, [4, 2, 5]
+Access: 4  Hit/Miss?  State of Memory? HIT,  [2, 5, 4]
+Access: 7  Hit/Miss?  State of Memory? MISS, [5, 4, 7]
+Access: 3  Hit/Miss?  State of Memory? MISS, [4, 7, 3]
+Access: 4  Hit/Miss?  State of Memory? HIT,  [7, 3, 4]
+Access: 5  Hit/Miss?  State of Memory? MISS, [3, 4, 5]
+
+swarajd@swarajd-travel:~/prog/systems/3ep/22_swapping_policies$ ./paging-policy.py -s 0 -n 10 -p OPT
+ARG addresses -1
+ARG addressfile 
+ARG numaddrs 10
+ARG policy OPT
+ARG clockbits 2
+ARG cachesize 3
+ARG maxpage 10
+ARG seed 0
+ARG notrace False
+
+Assuming a replacement policy of OPT, and a cache of size 3 pages,
+figure out whether each of the following page references hit or miss
+in the page cache.
+
+Access: 8  Hit/Miss?  State of Memory? MISS, [8]
+Access: 7  Hit/Miss?  State of Memory? MISS, [8, 7]
+Access: 4  Hit/Miss?  State of Memory? MISS, [8, 7, 4]
+Access: 2  Hit/Miss?  State of Memory? MISS, [7, 4, 2]
+Access: 5  Hit/Miss?  State of Memory? MISS, [7, 4, 5]
+Access: 4  Hit/Miss?  State of Memory? HIT,  [7, 4, 5]
+Access: 7  Hit/Miss?  State of Memory? HIT,  [7, 4, 5]
+Access: 3  Hit/Miss?  State of Memory? MISS, [4, 5, 3]
+Access: 4  Hit/Miss?  State of Memory? HIT,  [4, 5, 3]
+Access: 5  Hit/Miss?  State of Memory? HIT,  [4, 5, 3]
+
+
+2.
+
+FIFO = 1, 2, 3, 4, 5, 6, 1, 2, 3, 4
+LRU  = 1, 2, 3, 4, 5, 6, 1, 2, 3, 4
+MRU  = 1, 2, 3, 4, 5, 6, 5, 6, 5, 6
+
+3.
+
+trace = [9, 2, 4, 4, 8, 6, 4, 6, 3, 1]
+
+assuming cache size of 3:
+- FIFO:
+9 - MISS, [9]
+2 - MISS, [9, 2]
+4 - MISS, [9, 2, 4]
+4 - HIT,  [9, 2, 4]
+8 - MISS, [2, 4, 8]
+6 - MISS, [4, 8, 6]
+4 - HIT,  [4, 8, 6]
+6 - HIT,  [4, 8, 6]
+3 - MISS, [8, 6, 3]
+1 - MISS, [6, 3, 1]
+- LRU:
+9 - MISS, [9]
+2 - MISS, [9, 2]
+4 - MISS, [9, 2, 4]
+4 - HIT,  [9, 2, 4]
+8 - MISS, [2, 4, 8]
+6 - MISS, [4, 8, 6]
+4 - HIT,  [8, 6, 4]
+6 - HIT,  [8, 4, 6]
+3 - MISS, [4, 6, 3]
+1 - MISS, [6, 3, 1]
+- OPT:
+9 - MISS, [9]
+2 - MISS, [9, 2]
+4 - MISS, [9, 2, 4]
+4 - HIT,  [9, 2, 4]
+8 - MISS, [2, 4, 8]
+6 - MISS, [4, 8, 6]
+4 - HIT,  [4, 8, 6]
+6 - HIT,  [4, 8, 6]
+3 - MISS, [8, 6, 3]
+1 - MISS, [6, 3, 1]
+
+4. 
+
+trace = [8, 8, 8, 5, 3, 4, 4, 4, 4, 4]
+
+LRU:
+Access: 8  MISS LRU ->          [8] <- MRU Replaced:- [Hits:0 Misses:1]
+Access: 8  HIT  LRU ->          [8] <- MRU Replaced:- [Hits:1 Misses:1]
+Access: 8  HIT  LRU ->          [8] <- MRU Replaced:- [Hits:2 Misses:1]
+Access: 5  MISS LRU ->       [8, 5] <- MRU Replaced:- [Hits:2 Misses:2]
+Access: 3  MISS LRU ->    [8, 5, 3] <- MRU Replaced:- [Hits:2 Misses:3]
+Access: 4  MISS LRU ->    [5, 3, 4] <- MRU Replaced:8 [Hits:2 Misses:4]
+Access: 4  HIT  LRU ->    [5, 3, 4] <- MRU Replaced:- [Hits:3 Misses:4]
+Access: 4  HIT  LRU ->    [5, 3, 4] <- MRU Replaced:- [Hits:4 Misses:4]
+Access: 4  HIT  LRU ->    [5, 3, 4] <- MRU Replaced:- [Hits:5 Misses:4]
+Access: 4  HIT  LRU ->    [5, 3, 4] <- MRU Replaced:- [Hits:6 Misses:4]
+
+RANDOM:
+Access: 8  MISS Left  ->          [8] <- Right Replaced:- [Hits:0 Misses:1]
+Access: 8  HIT  Left  ->          [8] <- Right Replaced:- [Hits:1 Misses:1]
+Access: 8  HIT  Left  ->          [8] <- Right Replaced:- [Hits:2 Misses:1]
+Access: 5  MISS Left  ->       [8, 5] <- Right Replaced:- [Hits:2 Misses:2]
+Access: 3  MISS Left  ->    [8, 5, 3] <- Right Replaced:- [Hits:2 Misses:3]
+Access: 4  MISS Left  ->    [8, 5, 4] <- Right Replaced:3 [Hits:2 Misses:4]
+Access: 4  HIT  Left  ->    [8, 5, 4] <- Right Replaced:- [Hits:3 Misses:4]
+Access: 4  HIT  Left  ->    [8, 5, 4] <- Right Replaced:- [Hits:4 Misses:4]
+Access: 4  HIT  Left  ->    [8, 5, 4] <- Right Replaced:- [Hits:5 Misses:4]
+Access: 4  HIT  Left  ->    [8, 5, 4] <- Right Replaced:- [Hits:6 Misses:4]
+
+CLOCK:
+Access: 8  MISS Left  ->          [8] <- Right Replaced:- [Hits:0 Misses:1]
+Access: 8  HIT  Left  ->          [8] <- Right Replaced:- [Hits:1 Misses:1]
+Access: 8  HIT  Left  ->          [8] <- Right Replaced:- [Hits:2 Misses:1]
+Access: 5  MISS Left  ->       [8, 5] <- Right Replaced:- [Hits:2 Misses:2]
+Access: 3  MISS Left  ->    [8, 5, 3] <- Right Replaced:- [Hits:2 Misses:3]
+Access: 4  MISS Left  ->    [8, 5, 4] <- Right Replaced:3 [Hits:2 Misses:4]
+Access: 4  HIT  Left  ->    [8, 5, 4] <- Right Replaced:- [Hits:3 Misses:4]
+Access: 4  HIT  Left  ->    [8, 5, 4] <- Right Replaced:- [Hits:4 Misses:4]
+Access: 4  HIT  Left  ->    [8, 5, 4] <- Right Replaced:- [Hits:5 Misses:4]
+Access: 4  HIT  Left  ->    [8, 5, 4] <- Right Replaced:- [Hits:6 Misses:4]
+
+they all perform the same, but I assume for locality that LRU and CLOCK would
+perform better than RAND
+
+5.
+
+page size: 4096 bytes
+PageTables: 69976 kB
+
+it's a brick so lowkey only a cache of 10 pages is really needed and it's straight
