@@ -1,0 +1,7 @@
+1. The user time goes up with each instance of `mem` I run.
+2. The free column's value decreases when `mem` is run, but then jumps back up immediately when killed. The amount it jumps back by is expected.
+3. My computer has too much RAM to do this question lol, BUT when it worked once it was like 16 pages out, 16 pages in.
+4. The other CPU stats straight up just don't change that much.
+5. 4000 - ~900ms, 12000 causes a segfault
+6. it fails at like 10000 with a segfault
+7. n/a
