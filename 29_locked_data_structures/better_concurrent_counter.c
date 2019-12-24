@@ -1,12 +1,14 @@
+#define _GNU_SOURCE
+
 #include <stdio.h>
-#include <pthread.h>
+#include <sched.h>
 #include "mythreads.h"
 #include "better_concurrent_counter.h"
 
-int COUNT = 1000000;
+int COUNT = 10000000;
 
 void* increment_counter(void* counter) {
-    int thread_id = pthread_self();
+    int thread_id = sched_getcpu();
     for (int i = 0; i < COUNT; i++) {
         Counter_Increment((counter_t*)counter, thread_id);
     }

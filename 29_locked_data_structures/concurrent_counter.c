@@ -2,7 +2,7 @@
 #include "mythreads.h"
 #include "concurrent_counter.h"
 
-int COUNT = 1000000;
+int COUNT = 10000000;
 
 
 void* increment_counter(void* counter) {
