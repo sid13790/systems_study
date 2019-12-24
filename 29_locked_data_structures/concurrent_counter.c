@@ -4,10 +4,16 @@
 
 int COUNT = 10000000;
 
+typedef struct __myarg_t {
+    counter_t* c;
+    int threads;
+} myarg_t;
 
-void* increment_counter(void* counter) {
-    for (int i = 0; i < COUNT; i++) {
-        Counter_Increment((counter_t*)counter);
+
+void* increment_counter(void* myargs) {
+    myarg_t* m = (myarg_t*) myargs;
+    for (int i = 0; i < COUNT / m->threads; i++) {
+        Counter_Increment((counter_t*)m->c);
     }
     return NULL;
 }
@@ -23,8 +29,12 @@ int main() {
         pthread_t threads[i];
         double start_time = Time_GetSeconds();
 
+        myarg_t args;
+        args.c = &counter;
+        args.threads = i;
+
         for (int j = 0; j < i; j++) {
-            Pthread_create(&threads[j], NULL, &increment_counter, &counter);
+            Pthread_create(&threads[j], NULL, &increment_counter, &args);
         }
 
         for (int j = 0; j < i; j++) {
