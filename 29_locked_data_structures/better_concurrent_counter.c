@@ -19,7 +19,7 @@ int main() {
 
     counter_t counter;
 
-    int threshold = 1000;
+    int threshold = 10000;
 
 
     Counter_Init(&counter, threshold);
