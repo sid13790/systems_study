@@ -1,0 +1,140 @@
+1.
+
+the .acquire section basically spins until it can acquire the lock. Then it 
+acquires the flag by setting it to 1. After it acquires the lock, it enters the
+critical section, does the operations inside the CS, and then afterwards
+releases the lock. The final section checks if the loop is still running, and 
+re-runs the loop if so.
+
+2.
+
+swarajd@swarajd-travel:~/prog/systems/3ep/28_locks$ ./x86.py -p flag.s -M flag,count -R ax
+ARG seed 0
+ARG numthreads 2
+ARG program flag.s
+ARG interrupt frequency 50
+ARG interrupt randomness False
+ARG procsched 
+ARG argv 
+ARG load address 1000
+ARG memsize 128
+ARG memtrace flag,count
+ARG regtrace ax
+ARG cctrace False
+ARG printstats False
+ARG verbose False
+
+
+ flag count      ax          Thread 0                Thread 1         
+
+    0     0       0   
+    0     0       0   1000 mov  flag, %ax
+    0     0       0   1001 test $0, %ax
+    0     0       0   1002 jne  .acquire
+    1     0       0   1003 mov  $1, flag
+    1     0       0   1004 mov  count, %ax
+    1     0       1   1005 add  $1, %ax
+    1     1       1   1006 mov  %ax, count
+    0     1       1   1007 mov  $0, flag
+    0     1       1   1008 sub  $1, %bx
+    0     1       1   1009 test $0, %bx
+    0     1       1   1010 jgt .top
+    0     1       1   1011 halt
+    0     1       0   ----- Halt;Switch -----  ----- Halt;Switch -----  
+    0     1       0                            1000 mov  flag, %ax
+    0     1       0                            1001 test $0, %ax
+    0     1       0                            1002 jne  .acquire
+    1     1       0                            1003 mov  $1, flag
+    1     1       1                            1004 mov  count, %ax
+    1     1       2                            1005 add  $1, %ax
+    1     2       2                            1006 mov  %ax, count
+    0     2       2                            1007 mov  $0, flag
+    0     2       2                            1008 sub  $1, %bx
+    0     2       2                            1009 test $0, %bx
+    0     2       2                            1010 jgt .top
+    0     2       2                            1011 halt
+
+3.
+
+The count becomes 4. The loop runs twice per thread.
+
+4.
+
+If I set bx to 5, and i set to 10,11,12,15,16,18,19, or 20, then it works.
+
+5.
+
+First the code sets a register to 1, then it swaps the value of that register
+and a mutex variable. Next, it tests if ax is 0 (i.e. the mutex was previously 
+0). If it was 0, then we acquire the lock, else we try again. 
+
+If the lock was acquired, the critical section is entered and executed, then
+finally the lock is released.
+
+6.
+
+The code always works as expected, BUT it doesn't make good use of CPU time. 
+If there are N threads, N - 1 threads will be stuck spinning while 1 of the 
+threads actually does any work.
+
+7.
+
+Grabbing the lock in the first thread and trying to acquire it in the second 
+thread causes the right activity. 
+
+We should also test erratic switches of threads to make sure it works properly.
+
+8.
+
+This algorithm is built for 2 threads. The way the algorithm works is if the 
+lock isn't held, and a thread tries to take the lock, The flag array sets 
+the element of the current thread id to 1, essentially "taking" the lock. Once
+the lock is taken, the critical section is entered and executed. The lock is 
+then freed by setting the flag array element of the current thread to 0.
+
+If a thread tries to take the lock while it is already taken, then what happens
+is it'll set the flag to 1 regardless, but also check and see if the other 
+thread's flag is set. If the other thread's flag IS set AND it's the other 
+thread's turn, then it'll spin until it isn't that thread's turn and in each
+spin check if the other thread's flag is set.
+
+9.
+
+The behavior is always correct. Regardless of how often the interrupt arrives,
+the code behaves correctly because it checks both whose turn it is AND which 
+flag is set.
+
+10.
+
+interrupting in the middle of the acquire process to make sure it properly 
+works.
+
+11.
+
+Basically what this code does is whenever a thread wants to take the lock, it'll
+"grab" a ticket, and then increment the ticket counter. Next, it'll spin
+until it's the thread's "turn" to hold the lock, then execute the critical
+section.
+
+Once the critical section is finished executing, the lock is released by
+incrementing the turn counter. 
+
+The threads do spend a good amount of time spin-waiting for the lock.
+
+12.
+
+I noticed that each thread is treated fairly and gets the CPU for an equal 
+amount of time.
+
+13.
+
+This code basically tries to take the lock, and if it can't, it yields control
+to another thread and then retries taking the lock later. 
+
+One scenario where test-and-set.s would waste time spinning is if the interrupt
+timer were large. it saves one instruction when the thread doesn't have the 
+mutex.
+
+14.
+
+test-and-test-and-set avoids already setting the lock to 1 with the first test.
