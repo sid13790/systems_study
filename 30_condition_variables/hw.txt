@@ -1,0 +1,67 @@
+1.
+
+The producers will fill a buffer, while the consumers will get values from that
+same buffer. All of this within threads.
+
+2.
+
+The full buffer is rarely ever used, as typically the consumer will consume
+the data before the producer can fill up the buffer. Even if 100 items are 
+produced, the buffer will never be shown as full. If the consumer sleep string
+is changed, then the buffer is almost always full.
+
+3.
+
+lmao
+
+4.
+
+I predict the whole operation will take 10 seconds, because each consumer takes
+1 second after waiting for the signal, and actually running after the thread
+has been scheduled, so before it does a "get", it's basically forced to sleep, 
+since there the buffer never starts with anything in it.
+
+5.
+
+This won't affect the time taken, as a consumer will still sleep before running
+a "get", which will cause all 10 gets to take a second each, regardless of 
+buffer size.
+
+6.
+
+Since the sleep is after the unlock, I predict this while operation will take 
+5 seconds, since the unlock happens prior, other threads can run while the 
+sleeping thread spins.
+
+7.
+
+Same time as before, most likely.
+
+8.
+
+No
+
+9.
+
+Any sleep string which allows for the two consumers to start, then the producer 
+to go once, wait on itself, pass control to one consumer, and then another,
+when there is nothing left in the buffer.
+
+10.
+
+If it's just one consumer and one producer, no. If it's multiple consumers and 
+one producer, then a scenario such as:
+
+Tc1 runs, nothing to get, so it sleeps
+Tp runs, fills the buffer, awakens Tc1, but doesn't run it.
+Tp runs again, but the buffer is full, so it sleeps
+Tc2 runs, gets the data, and awakens Tp, but doesn't run it.
+Tc1 runs, but there is no data to get
+
+time ./main-two-cvs-if -p 1 -c 2 -m 1 -C 0,0,0,5,0,0,0:1,0,0,0,0,0,0 -P 1,0,0,4,0,0,0 -v -t
+
+11.
+
+The first thing that comes to mind is a data race. Not sure how to ensure that
+data race happens, though.
+
