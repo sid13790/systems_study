@@ -1,0 +1,76 @@
+1.
+
+It typically prints the first vector's two locks, then the second vector's two
+locks, or the other way around.
+
+2.
+
+The code doesn't always deadlock. In fact, the code rarely deadlocks. You have 
+to pass a MASSIVE l for it to deadlock.
+
+3.
+
+The code definitely won't deadlock if n = 0, 1
+
+4.
+
+The code always locks in the same global order by checking addresses, and only
+locking one of the locks if the vectors are the same.
+
+5.
+
+It took 0.08 seconds. Multiplying loops by 10 took 0.59 seconds. Multiplying
+threads by 10 took 1.18 seconds.
+
+6.
+
+I would expect the performance to get a lot better, since the threads aren't
+waiting for a couple locks. Adding the -p flag changed the time from 0.08 to 
+0.02 seconds. For the other multipliers the times were: 0.19 seconds, 
+0.10 seconds.
+
+7.
+
+The first call is unnecessary, as if the lock is held, if you just have the 
+wait, it'll wait by itself instead of needing to repeatedly try and acquire the
+lock. 
+
+This code runs MUCH slower than the global order code.
+0.16
+1.54
+super slow
+
+The number of retries scale by double per thread added.
+
+8.
+
+The main problem is it gets rid of the point of multiple locks by just 
+enveloping them in one big lock.
+
+0.17
+2.02
+1.35
+
+with -p:
+
+0.07
+1.73
+0.91
+
+9.
+
+No, because if two threads are doing the same thing to one destination vector,
+the destination vector could have mixed values from the source vectors,
+regardless of if the operation was atomic. 
+
+10.
+
+0.46
+4.32
+2.38
+
+with -p:
+
+0.12
+0.78
+0.79
