@@ -1,5 +1,5 @@
 
-BINARIES = fork-join rendezvous
+BINARIES = fork-join rendezvous barrier
 HEADERS = common_threads.h
 
 all: $(BINARIES)
@@ -13,3 +13,5 @@ fork-join: fork-join.c $(HEADERS)
 rendezvous: rendezvous.c $(HEADERS)
 	gcc -o rendezvous rendezvous.c -Wall -pthread
 
+barrier: barrier.c $(HEADERS)
+	gcc -o barrier barrier.c -Wall -pthread
