@@ -1,5 +1,5 @@
 
-BINARIES = fork-join rendezvous barrier reader-writer
+BINARIES = fork-join rendezvous barrier reader-writer reader-writer-nostarve
 HEADERS = common_threads.h
 
 all: $(BINARIES)
@@ -18,3 +18,6 @@ barrier: barrier.c $(HEADERS)
 
 reader-writer: reader-writer.c $(HEADERS)
 	gcc -o reader-writer reader-writer.c -Wall -pthread
+
+reader-writer-nostarve: reader-writer-nostarve.c $(HEADERS)
+	gcc -o reader-writer-nostarve reader-writer-nostarve.c -Wall -pthread
