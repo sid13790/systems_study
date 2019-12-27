@@ -63,7 +63,7 @@ int main() {
         }
         printf("server received %d bytes: %s", msg_byte_size, buf);
 
-        if (send(new_fd, "Hello, world!\n", 14, 0) == -1) {
+        if (send(new_fd, "Hello, world!\r\n", 15, 0) == -1) {
             perror("send");
             close(new_fd);
             exit(0);
