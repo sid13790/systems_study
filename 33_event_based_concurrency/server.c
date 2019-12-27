@@ -33,6 +33,7 @@ int main()
     struct sockaddr_in address;
 
     char buffer[1025]; // data buffer of 1k
+    char filebuffer[10240];
 
     fd_set readfds;
 
@@ -177,9 +178,28 @@ int main()
                         set the string terminating NULL byte on the end of 
                         the data read
                     */
-                    buffer[valread] = '\0';
-                    if (send(sd, buffer, strlen(buffer), 0) != strlen(buffer)) {
+                    buffer[valread - 2] = '\0';
+                    printf("file requested: \"%s\"\n", buffer);
+                    FILE* f = fopen(buffer, "rb");
+                    if (f) {
+                        fseek(f, 0, SEEK_END);
+                        int length = ftell(f);
+                        fseek(f, 0, SEEK_SET);
+                        if (fread(filebuffer, 1, length, f) == 0) {
+                            perror("failed to read file into buffer");
+                            fclose(f);
+                            continue;
+                        }
+                        fclose(f);
+                    } else {
+                        perror("failed to open file");
+                        continue;
+                    }
+
+                    if (send(sd, filebuffer, strlen(filebuffer), 0) != strlen(filebuffer)) {
                         perror("failed to send message back to client");
+                    } else {
+                        bzero(filebuffer, 10240);
                     }
                 }
             }
