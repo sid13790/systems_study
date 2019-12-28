@@ -4,17 +4,22 @@
 
 #include <sys/socket.h>
 #include <sys/time.h>
+#include <sys/stat.h> 
+#include <fcntl.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
 #include <errno.h>
 #include <unistd.h>
 
+#include <aio.h>
+
 #define PORT 1337
 #define BACKLOG 10
 #define BUFSIZE 1024
 #define TRUE 1
 #define FALSE 0
+#define MAX_CLIENTS 30
 
 int main()
 {
@@ -23,17 +28,19 @@ int main()
     int master_socket;
     int addrlen;
     int new_socket;
-    int client_socket[30];
-    int MAX_CLIENTS = 30;
+    int client_socket[MAX_CLIENTS];
     int activity;
     int valread;
     int sd;
     int max_sd;
 
+    struct aiocb file_ops[MAX_CLIENTS];
+    int aio_fds[MAX_CLIENTS];
+
     struct sockaddr_in address;
 
     char buffer[1025]; // data buffer of 1k
-    char filebuffer[10240];
+    char filebuffer[MAX_CLIENTS][10240];
 
     fd_set readfds;
 
@@ -171,35 +178,45 @@ int main()
                     client_socket[i] = 0;
                 }
 
-                // echo back the message that came in
+                // return file results
                 else 
                 {
-                    /*
-                        set the string terminating NULL byte on the end of 
-                        the data read
-                    */
-                    buffer[valread - 2] = '\0';
-                    printf("file requested: \"%s\"\n", buffer);
-                    FILE* f = fopen(buffer, "rb");
-                    if (f) {
-                        fseek(f, 0, SEEK_END);
-                        int length = ftell(f);
-                        fseek(f, 0, SEEK_SET);
-                        if (fread(filebuffer, 1, length, f) == 0) {
-                            perror("failed to read file into buffer");
-                            fclose(f);
+                    if (file_ops[i].aio_fildes != NULL) {
+                        if (aio_error(&file_ops[i]) == 0) {
+                            if (send(sd, filebuffer[i], strlen(filebuffer[i]), 0) != strlen(filebuffer[i])) {
+                                perror("failed to send message back to client");
+                            }
+                            bzero(filebuffer[i], 10240);
+                            close(aio_fds[i]);
+                            file_ops[i] = (struct aiocb) { 0 };
+                        } else {
                             continue;
                         }
-                        fclose(f);
                     } else {
-                        perror("failed to open file");
-                        continue;
-                    }
+                        /*
+                            set the string terminating NULL byte on the end of 
+                            the data read
+                        */
+                        buffer[valread - 2] = '\0';
+                        printf("file requested: \"%s\"\n", buffer);
+                        int fd = open(buffer, O_RDONLY);
+                        if (fd >= 0) {
+                            int length = lseek(fd, 0, SEEK_END);
 
-                    if (send(sd, filebuffer, strlen(filebuffer), 0) != strlen(filebuffer)) {
-                        perror("failed to send message back to client");
-                    } else {
-                        bzero(filebuffer, 10240);
+                            struct aiocb aio_ = {
+                                fd,
+                                0,
+                                filebuffer[i],
+                                length
+                            };
+
+                            file_ops[i] = aio_;
+                            aio_fds[i] = fd;
+                            aio_read(&aio_);
+                        } else {
+                            perror("failed to open file");
+                            continue;
+                        }   
                     }
                 }
             }
