@@ -1,0 +1,141 @@
+1.
+
+-a 0: 
+    rotate: 165
+    transfer: 30
+    seek: 0
+-a 6:
+    rotate: 345
+    transfer: 30
+    seek: 0
+-a 30:
+    rotate: 265
+    transfer: 30
+    seek: 80
+-a 7,30,8:
+    rotate: 15 + 220 + 310 = 545
+    transfer: 30 + 30 + 30 = 90
+    seek: 80 + 80 = 160
+-a 10,11,12,13:
+    rotate: 105 + 320 = 425
+    transfer: 120
+    seek: 40
+
+2.
+
+-a 10: no change for any
+-a 6:  no change for any
+-a 30: 
+    -S 2:
+        rotate: 305
+        transfer: 30
+        seek: 40
+    -S 4:
+        rotate: 325
+        transfer: 30
+        seek: 20
+    -S 8:
+        rotate: 335
+        transfer: 30
+        seek: 10
+    -S 10:
+        rotate: 337
+        transfer: 30
+        seek: 8
+    -s 40:
+        rotate: 343
+        transfer: 30
+        seek: 2
+    -s 0.1:
+        rotate: 265
+        transfer: 30
+        seek: 800
+
+not gonna do the other two LOL, but the trend I noticed is the time transfers
+from either seek to rotate, or rotate to seek, or increases both, depending on
+the timing.
+
+3.
+
+-a 0:
+    -R 0.1:
+        rotate: 1650
+        transfer: 300
+        seek: 0
+
+not gonna do the rest, but the rotate times basically multiply by however much
+the cost is. There is a slight difference if there is a seek since the seek is
+proportionally faster than the rotate depending on the time given.
+
+4.
+
+It should be 7,8,30.
+
+rotate: 15 + 190 = 205
+transfer: 90
+seek: 80
+
+This strategy reduces the rotate and seek time.
+
+5.
+
+SATF makes no difference for the 7,30,8 load.
+
+-a 21,6 -p SATF:
+    rotate: 235
+    transfer: 60
+    seek: 80
+-a 21,6 -p SSTF:
+    rotate: 365
+    transfer: 60
+    seek: 40
+
+SATF is faster when the sector scheduled to read first is farther away than
+the next sector scheduled to read in terms of rotate + seek time.
+
+6.
+
+It has to rotate all the way around in order to read 12 and 13. The skew should
+be 2 blocks in order to maximize performance.
+
+7.
+
+-z 10,20,30 -a -1 -A 5,-1,0:
+    rotate: 310 + 240 + 85 + 260 + 130 = 1025
+    transfer: 20 + 20 + 10 + 10 + 10 = 70
+    seek: 40 + 40 = 80
+
+outer = 3/(85 + 10 + 260 + 10 + 130 + 10 + 40) = 0.0055 sector/s
+middle = 2/(310 + 20 + 240 + 20 + 40) = 0.0032 sector/s
+
+8.
+
+when scheduling window = 1:
+TOTALS      Seek:20960  Rotate:169165  Transfer:30000  Total:220125
+when scheduling window is unset:
+TOTALS      Seek:1520  Rotate:3955  Transfer:30000  Total:35475
+
+Setting the window to 170 makes it such that the performance is optimal.
+
+When the window is 1, the policy used does not matter.
+
+9.
+
+./disk.py -a 7,22,11,23,12,13,7,22 -p SATF -c -G
+TOTALS      Seek:160  Rotate:485  Transfer:240  Total: 885
+
+This does solve starvation. It doesn't perform as well, though:
+TOTALS      Seek:120  Rotate:585  Transfer:240  Total: 945
+
+The tradeoff should be made when a request is taking too long to be serviced.
+i.e. the window should be large enough to be performant but small enough to make
+ sure a request doesn't go unfulfilled for too long.
+
+10.
+
+12,1,2,3,4,5,6 -> SATF
+TOTALS      Seek: 80  Rotate:325  Transfer:210  Total: 615
+
+rotate: 195 + 120 = 315
+transfer: 210
+seek: 40
