@@ -1,0 +1,508 @@
+1.
+
+RAID 0:
+
+swarajd@swarajd-travel:~/prog/systems/3ep/38_redundant_disk_arrays_raid$ ./raid.py -n 2 -L 0 -R 20
+ARG blockSize 4096
+ARG seed 0
+ARG numDisks 4
+ARG chunkSize 4k
+ARG numRequests 2
+ARG reqSize 4k
+ARG workload rand
+ARG writeFrac 0
+ARG randRange 20
+ARG level 0
+ARG raid5 LS
+ARG reverse False
+ARG timing False
+
+LOGICAL READ from addr:16 size:4096
+  Physical reads/writes? [disk 0, offset 4]
+
+LOGICAL READ from addr:8 size:4096
+  Physical reads/writes? [disk 0, offset 2]
+
+
+
+RAID 1:
+
+swarajd@swarajd-travel:~/prog/systems/3ep/38_redundant_disk_arrays_raid$ ./raid.py -n 2 -L 1 -R 20
+ARG blockSize 4096
+ARG seed 0
+ARG numDisks 4
+ARG chunkSize 4k
+ARG numRequests 2
+ARG reqSize 4k
+ARG workload rand
+ARG writeFrac 0
+ARG randRange 20
+ARG level 1
+ARG raid5 LS
+ARG reverse False
+ARG timing False
+
+LOGICAL READ from addr:16 size:4096
+  Physical reads/writes? [disk 0, offset 8]
+
+LOGICAL READ from addr:8 size:4096
+  Physical reads/writes? [disk 0, offset 4]
+
+
+
+RAID 4:
+
+swarajd@swarajd-travel:~/prog/systems/3ep/38_redundant_disk_arrays_raid$ ./raid.py -n 2 -L 4 -R 20
+ARG blockSize 4096
+ARG seed 0
+ARG numDisks 4
+ARG chunkSize 4k
+ARG numRequests 2
+ARG reqSize 4k
+ARG workload rand
+ARG writeFrac 0
+ARG randRange 20
+ARG level 4
+ARG raid5 LS
+ARG reverse False
+ARG timing False
+
+LOGICAL READ from addr:16 size:4096
+  Physical reads/writes? [disk 1, offset 5]
+
+LOGICAL READ from addr:8 size:4096
+  Physical reads/writes? [disk 2, offset 2]
+
+
+01 02 03 p_
+04 05 06 p_
+07 08 09 p_
+10 11 12 p_
+13 14 15 p_
+16 17 18 p_
+19       p_
+
+
+
+
+RAID 5 setup:
+
+symmetric:
+01 02 03 p_
+05 06 p_ 04
+09 p_ 07 08
+p_ 10 11 12
+13 14 15 p_
+17 18 p_ 16
+
+asymmetric:
+01 02 03 p_
+04 05 p_ 06
+07 p_ 08 09
+p_ 10 11 12
+13 14 15 p_
+16 17 p_ 18
+
+
+RAID 5 (LS):
+
+swarajd@swarajd-travel:~/prog/systems/3ep/38_redundant_disk_arrays_raid$ ./raid.py -n 2 -L 5 -R 20
+ARG blockSize 4096
+ARG seed 0
+ARG numDisks 4
+ARG chunkSize 4k
+ARG numRequests 2
+ARG reqSize 4k
+ARG workload rand
+ARG writeFrac 0
+ARG randRange 20
+ARG level 5
+ARG raid5 LS
+ARG reverse False
+ARG timing False
+
+LOGICAL READ from addr:16 size:4096
+  Physical reads/writes? [disk 3, offset 5]
+
+LOGICAL READ from addr:8 size:4096
+  Physical reads/writes? [disk 3, offset 2]
+
+
+RAID 5 (LA):
+
+swarajd@swarajd-travel:~/prog/systems/3ep/38_redundant_disk_arrays_raid$ ./raid.py -n 2 -L 5 -R 20
+ARG blockSize 4096
+ARG seed 0
+ARG numDisks 4
+ARG chunkSize 4k
+ARG numRequests 2
+ARG reqSize 4k
+ARG workload rand
+ARG writeFrac 0
+ARG randRange 20
+ARG level 5
+ARG raid5 LS
+ARG reverse False
+ARG timing False
+
+LOGICAL READ from addr:16 size:4096
+  Physical reads/writes? [disk 0, offset 5]
+
+LOGICAL READ from addr:8 size:4096
+  Physical reads/writes? [disk 2, offset 2]
+
+
+
+
+2.
+
+RAID 0:
+
+swarajd@swarajd-travel:~/prog/systems/3ep/38_redundant_disk_arrays_raid$ ./raid.py -n 2 -L 0 -R 20 -C 8192
+ARG blockSize 4096
+ARG seed 0
+ARG numDisks 4
+ARG chunkSize 8192
+ARG numRequests 2
+ARG reqSize 4k
+ARG workload rand
+ARG writeFrac 0
+ARG randRange 20
+ARG level 0
+ARG raid5 LS
+ARG reverse False
+ARG timing False
+
+LOGICAL READ from addr:16 size:4096
+  Physical reads/writes? [disk 0, offset 4]
+
+LOGICAL READ from addr:8 size:4096
+  Physical reads/writes? [disk 0, offset 2]
+
+00 02 04 06
+01 03 05 07
+08 10 12 14
+09 11 13 15
+16 18 20 22
+17 19 21 23
+
+
+
+RAID 1:
+
+swarajd@swarajd-travel:~/prog/systems/3ep/38_redundant_disk_arrays_raid$ ./raid.py -n 2 -L 1 -R 20 -C 8192
+ARG blockSize 4096
+ARG seed 0
+ARG numDisks 4
+ARG chunkSize 8192
+ARG numRequests 2
+ARG reqSize 4k
+ARG workload rand
+ARG writeFrac 0
+ARG randRange 20
+ARG level 1
+ARG raid5 LS
+ARG reverse False
+ARG timing False
+
+LOGICAL READ from addr:16 size:4096
+  Physical reads/writes? [disk 2, offset 6]
+
+LOGICAL READ from addr:8 size:4096
+  Physical reads/writes? [disk 0, offset 8]
+
+00 00 10 10
+01 01 11 11
+02 02 12 12
+03 03 13 13
+04 04 14 14
+05 05 15 15
+06 06 16 16
+07 07 17 17
+08 08 18 18
+09 09 19 19
+
+Ok so apparently I'm wrong and it's actually 
+
+16 -> 0,8
+8  -> 0,4
+
+because they're striping the RAID 1 disks for some reason which causes 16 and 8
+to be in the same disk, but if it were REAL actual plain RAID 1 I would be 
+right I'm pretty sure.
+
+
+
+RAID 4:
+
+swarajd@swarajd-travel:~/prog/systems/3ep/38_redundant_disk_arrays_raid$ ./raid.py -n 2 -L 5 -R 20 -C 8k
+ARG blockSize 4096
+ARG seed 0
+ARG numDisks 4
+ARG chunkSize 8k
+ARG numRequests 2
+ARG reqSize 4k
+ARG workload rand
+ARG writeFrac 0
+ARG randRange 20
+ARG level 5
+ARG raid5 LS
+ARG reverse False
+ARG timing False
+
+LOGICAL READ from addr:16 size:4096
+  Physical reads/writes? [disk 2, offset 4]
+
+LOGICAL READ from addr:8 size:4096
+  Physical reads/writes? [disk 1, offset 2]
+
+
+00 02 04 p_
+01 03 05 p_
+06 08 10 p_
+07 09 11 p_
+12 14 16 p_
+13 15 17 p_
+18       p_
+19       p_
+
+
+I'm pretty sure I'm right again idk how this hw program is doing chunk sizes
+with RAID 4 but this seems right. I'm going to stop here for #2 since I'm p sure
+ I'll be getting right answers and have no idea why my answers are wrong.
+
+Just FYI the program says the answer is:
+
+16 -> 2,5
+8  -> 1,2
+
+Maybe it's shifting the offset by 1 /shrug.
+
+3.
+
+swarajd@swarajd-travel:~/prog/systems/3ep/38_redundant_disk_arrays_raid$ ./raid.py -n 2 -L 0 -R 20 -C 8k -r -s 2
+ARG blockSize 4096
+ARG seed 2
+ARG numDisks 4
+ARG chunkSize 8k
+ARG numRequests 2
+ARG reqSize 4k
+ARG workload rand
+ARG writeFrac 0
+ARG randRange 20
+ARG level 0
+ARG raid5 LS
+ARG reverse True
+ARG timing False
+
+LOGICAL OPERATION is 19
+  read  [disk 1, offset 5]   
+
+LOGICAL OPERATION is 1
+  read  [disk 0, offset 1] 
+
+
+00 02 04 06
+01 03 05 07
+08 10 12 14
+09 11 13 15
+16 18 20 22
+17 19 21 23
+
+
+
+4.
+
+swarajd@swarajd-travel:~/prog/systems/3ep/38_redundant_disk_arrays_raid$ ./raid.py -n 2 -L 4 -R 20 -C 8k -r -s 3 -S 12k 
+ARG blockSize 4096
+ARG seed 3
+ARG numDisks 4
+ARG chunkSize 8k
+ARG numRequests 2
+ARG reqSize 12k
+ARG workload rand
+ARG writeFrac 0
+ARG randRange 20
+ARG level 4
+ARG raid5 LS
+ARG reverse True
+ARG timing False
+
+LOGICAL OPERATION is 5,6 & 11 ????
+  read  [disk 2, offset 1]     read  [disk 2, offset 2]     read  [disk 0, offset 2]   
+LOGICAL OPERATION is 7,8,14 ????
+  read  [disk 0, offset 3]     read  [disk 1, offset 2]     read  [disk 1, offset 4]
+
+
+Yeah the answer is 4 and 7 but I don't see how it's correct.
+
+
+5.
+
+RAID 0:
+
+each disk should receive ~25 requests of 4kb. 
+random requests take 10 ms
+
+so given this information I would assume that the 100 requests in total take 
+250ms, since each disk can be read in parallel.
+
+
+Answer:
+disk:0  busy: 100.00  I/Os:    28 (sequential:0 nearly:1 random:27)
+disk:1  busy:  93.91  I/Os:    29 (sequential:0 nearly:6 random:23)
+disk:2  busy:  87.92  I/Os:    24 (sequential:0 nearly:0 random:24)
+disk:3  busy:  65.94  I/Os:    19 (sequential:0 nearly:1 random:18)
+
+STAT totalTime 275.69999999999993
+
+
+
+
+RAID 1:
+
+each disk should receive 25 requests, thus it should have the same performance
+as RAID 0. I'm guessing 250ms again.
+
+disk:0  busy:  58.85  I/Os:    28 (sequential:0 nearly:1 random:27)
+disk:1  busy:  51.18  I/Os:    24 (sequential:0 nearly:0 random:24)
+disk:2  busy:   0.00  I/Os:     0 (sequential:0 nearly:0 random:0)
+disk:3  busy: 100.00  I/Os:    48 (sequential:0 nearly:2 random:46)
+
+STAT totalTime 473.6000000000004
+
+Alright so it turns out disk 3 doesn't work or something so it actually took 
+500 ms.
+
+
+
+
+RAID 4:
+
+With RAID 4, the load will be distributed on the 3 disks equally, since the 4th
+is used for parity, so it'll take 330ms roughly.
+
+disk:0  busy:  78.48  I/Os:    30 (sequential:0 nearly:0 random:30)
+disk:1  busy: 100.00  I/Os:    40 (sequential:0 nearly:3 random:37)
+disk:2  busy:  76.46  I/Os:    30 (sequential:0 nearly:2 random:28)
+disk:3  busy:   0.00  I/Os:     0 (sequential:0 nearly:0 random:0)
+
+STAT totalTime 386.1000000000002
+
+Not too far off.
+
+
+
+
+RAID 5:
+
+With RAID 5, all of the drives can be used so we can see 250ms again.
+
+disk:0  busy: 100.00  I/Os:    33 (sequential:0 nearly:2 random:31)
+disk:1  busy:  71.99  I/Os:    23 (sequential:0 nearly:0 random:23)
+disk:2  busy:  56.34  I/Os:    19 (sequential:0 nearly:1 random:18)
+disk:3  busy:  75.47  I/Os:    25 (sequential:0 nearly:2 random:23)
+
+STAT totalTime 322.70000000000005
+
+
+Again, quite close.
+
+6.
+
+8 disks:
+    RAID 0: STAT totalTime 156.49999999999994
+    RAID 1: STAT totalTime 258.8999999999999
+    RAID 4: STAT totalTime 164.99999999999994
+    RAID 5: STAT totalTime 164.18571428571425
+
+So the reads scale exponentially. As the disks double, the time halves.
+
+7.
+
+RAID 0: 275.69999999999993
+    this makes sense because for 0 R/W is basically the same
+RAID 1: 509.80000000000047
+    this makes sense because each write takes TWO I/Os instead of one
+RAID 4: 982.4666666666681
+    this makes sense because you have to write the block AND the parity disk
+RAID 5: STAT totalTime 559.5000000000006
+    this also makes sense, BUT you can do more parallel writes since the parity
+    blocks are spread out.
+
+8.
+
+reads:
+RAID 0:
+
+disk:0  busy: 100.00  I/Os:    25 (sequential:24 nearly:0 random:1)
+disk:1  busy: 100.00  I/Os:    25 (sequential:24 nearly:0 random:1)
+disk:2  busy: 100.00  I/Os:    25 (sequential:24 nearly:0 random:1)
+disk:3  busy: 100.00  I/Os:    25 (sequential:24 nearly:0 random:1)
+
+STAT totalTime 12.499999999999991
+
+RAID 1:
+
+disk:0  busy:  99.33  I/Os:    25 (sequential:0 nearly:24 random:1)
+disk:1  busy:  99.33  I/Os:    25 (sequential:0 nearly:24 random:1)
+disk:2  busy:   0.00  I/Os:     0 (sequential:0 nearly:0 random:0)
+disk:3  busy: 100.00  I/Os:    50 (sequential:49 nearly:0 random:1)
+
+STAT totalTime 14.999999999999982
+
+RAID 4:
+
+disk:0  busy: 100.00  I/Os:    34 (sequential:33 nearly:0 random:1)
+disk:1  busy:  99.25  I/Os:    33 (sequential:27 nearly:5 random:1)
+disk:2  busy:  99.25  I/Os:    33 (sequential:27 nearly:5 random:1)
+disk:3  busy:   0.00  I/Os:     0 (sequential:0 nearly:0 random:0)
+
+STAT totalTime 13.399999999999988
+
+RAID 5:
+
+disk:0  busy: 100.00  I/Os:    26 (sequential:0 nearly:25 random:1)
+disk:1  busy:  99.75  I/Os:    25 (sequential:0 nearly:24 random:1)
+disk:2  busy:  98.00  I/Os:    24 (sequential:0 nearly:23 random:1)
+disk:3  busy:  99.75  I/Os:    25 (sequential:0 nearly:24 random:1)
+
+STAT totalTime 13.333333333333323
+
+
+writes:
+RAID 0:
+
+disk:0  busy: 100.00  I/Os:    25 (sequential:24 nearly:0 random:1)
+disk:1  busy: 100.00  I/Os:    25 (sequential:24 nearly:0 random:1)
+disk:2  busy: 100.00  I/Os:    25 (sequential:24 nearly:0 random:1)
+disk:3  busy: 100.00  I/Os:    25 (sequential:24 nearly:0 random:1)
+
+STAT totalTime 12.499999999999991
+
+RAID 1:
+
+disk:0  busy: 100.00  I/Os:    50 (sequential:49 nearly:0 random:1)
+disk:1  busy: 100.00  I/Os:    50 (sequential:49 nearly:0 random:1)
+disk:2  busy: 100.00  I/Os:    50 (sequential:49 nearly:0 random:1)
+disk:3  busy: 100.00  I/Os:    50 (sequential:49 nearly:0 random:1)
+
+STAT totalTime 14.999999999999982
+
+RAID 4:
+
+disk:0  busy: 100.00  I/Os:    68 (sequential:33 nearly:34 random:1)
+disk:1  busy:  99.25  I/Os:    66 (sequential:27 nearly:38 random:1)
+disk:2  busy:  99.25  I/Os:    66 (sequential:27 nearly:38 random:1)
+disk:3  busy: 100.00  I/Os:   200 (sequential:0 nearly:199 random:1)
+
+STAT totalTime 13.399999999999988
+
+RAID 5:
+
+disk:0  busy:  99.50  I/Os:   100 (sequential:0 nearly:99 random:1)
+disk:1  busy:  99.25  I/Os:    98 (sequential:0 nearly:97 random:1)
+disk:2  busy:  99.25  I/Os:    98 (sequential:0 nearly:97 random:1)
+disk:3  busy: 100.00  I/Os:   104 (sequential:0 nearly:103 random:1)
+
+STAT totalTime 13.399999999999988
