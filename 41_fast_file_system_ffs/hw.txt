@@ -1,0 +1,490 @@
+1.
+
+I expect to see the file spread out to different groups after 4 blocks are 
+allocated to the file in the initial group.
+
+swarajd@swarajd-travel:~/prog/systems/3ep/41_fast_file_system_ffs$ ./ffs.py -f in.largefile -L 4 -c
+
+num_groups:       10
+inodes_per_group: 10
+blocks_per_group: 30
+
+free data blocks: 259 (of 300)
+free inodes:      98 (of 100)
+
+spread inodes?    False
+spread data?      False
+contig alloc:     1
+
+      0000000000 0000000000 1111111111 2222222222 
+      0123456789 0123456789 0123456789 0123456789 
+
+group inodes     data
+    0 /a-------- /aaaa----- ---------- ---------- 
+    1 ---------- aaaa------ ---------- ---------- 
+    2 ---------- aaaa------ ---------- ---------- 
+    3 ---------- aaaa------ ---------- ---------- 
+    4 ---------- aaaa------ ---------- ---------- 
+    5 ---------- aaaa------ ---------- ---------- 
+    6 ---------- aaaa------ ---------- ---------- 
+    7 ---------- aaaa------ ---------- ---------- 
+    8 ---------- aaaa------ ---------- ---------- 
+    9 ---------- aaaa------ ---------- ---------- 
+
+
+2.
+
+I expect the file to take up the whole group, and then 11 blocks in group 1.
+
+swarajd@swarajd-travel:~/prog/systems/3ep/41_fast_file_system_ffs$ ./ffs.py -f in.largefile -L 30 -c
+
+num_groups:       10
+inodes_per_group: 10
+blocks_per_group: 30
+
+free data blocks: 259 (of 300)
+free inodes:      98 (of 100)
+
+spread inodes?    False
+spread data?      False
+contig alloc:     1
+
+      0000000000 0000000000 1111111111 2222222222 
+      0123456789 0123456789 0123456789 0123456789 
+
+group inodes     data
+    0 /a-------- /aaaaaaaaa aaaaaaaaaa aaaaaaaaaa 
+    1 ---------- aaaaaaaaaa a--------- ---------- 
+    2 ---------- ---------- ---------- ---------- 
+    3 ---------- ---------- ---------- ---------- 
+    4 ---------- ---------- ---------- ---------- 
+    5 ---------- ---------- ---------- ---------- 
+    6 ---------- ---------- ---------- ---------- 
+    7 ---------- ---------- ---------- ---------- 
+    8 ---------- ---------- ---------- ---------- 
+    9 ---------- ---------- ---------- ---------- 
+
+3.
+
+I would expect the filespan to decrease as the large-file exception increases.
+
+swarajd@swarajd-travel:~/prog/systems/3ep/41_fast_file_system_ffs$ ./ffs.py -f in.largefile -L 4 -T -c 
+
+num_groups:       10
+inodes_per_group: 10
+blocks_per_group: 30
+
+free data blocks: 259 (of 300)
+free inodes:      98 (of 100)
+
+spread inodes?    False
+spread data?      False
+contig alloc:     1
+
+      0000000000 0000000000 1111111111 2222222222 
+      0123456789 0123456789 0123456789 0123456789 
+
+group inodes     data
+    0 /a-------- /aaaa----- ---------- ---------- 
+    1 ---------- aaaa------ ---------- ---------- 
+    2 ---------- aaaa------ ---------- ---------- 
+    3 ---------- aaaa------ ---------- ---------- 
+    4 ---------- aaaa------ ---------- ---------- 
+    5 ---------- aaaa------ ---------- ---------- 
+    6 ---------- aaaa------ ---------- ---------- 
+    7 ---------- aaaa------ ---------- ---------- 
+    8 ---------- aaaa------ ---------- ---------- 
+    9 ---------- aaaa------ ---------- ---------- 
+
+span: files
+  file:         /a  filespan: 372
+               avg  filespan: 372.00
+
+span: directories
+  dir:           /  dirspan: 377
+               avg  dirspan: 377.00
+
+swarajd@swarajd-travel:~/prog/systems/3ep/41_fast_file_system_ffs$ ./ffs.py -f in.largefile -L 100 -T -c 
+
+num_groups:       10
+inodes_per_group: 10
+blocks_per_group: 30
+
+free data blocks: 259 (of 300)
+free inodes:      98 (of 100)
+
+spread inodes?    False
+spread data?      False
+contig alloc:     1
+
+      0000000000 0000000000 1111111111 2222222222 
+      0123456789 0123456789 0123456789 0123456789 
+
+group inodes     data
+    0 /a-------- /aaaaaaaaa aaaaaaaaaa aaaaaaaaaa 
+    1 ---------- aaaaaaaaaa a--------- ---------- 
+    2 ---------- ---------- ---------- ---------- 
+    3 ---------- ---------- ---------- ---------- 
+    4 ---------- ---------- ---------- ---------- 
+    5 ---------- ---------- ---------- ---------- 
+    6 ---------- ---------- ---------- ---------- 
+    7 ---------- ---------- ---------- ---------- 
+    8 ---------- ---------- ---------- ---------- 
+    9 ---------- ---------- ---------- ---------- 
+
+span: files
+  file:         /a  filespan:  72
+               avg  filespan:  72.67
+
+span: directories
+  dir:           /  dirspan:  77
+               avg  dirspan:  77.67
+
+
+4.
+
+It'll fit the root files in group 0, and all the j and t dir files in groups
+1 and 2.
+
+swarajd@swarajd-travel:~/prog/systems/3ep/41_fast_file_system_ffs$ ./ffs.py -f in.manyfiles
+
+num_groups:       10
+inodes_per_group: 10
+blocks_per_group: 30
+
+free data blocks: 245 (of 300)
+free inodes:      72 (of 100)
+
+spread inodes?    False
+spread data?      False
+contig alloc:     1
+
+      0000000000 0000000000 1111111111 2222222222 
+      0123456789 0123456789 0123456789 0123456789 
+
+group inodes     data
+    0 /abcdefghi /aabbccdde effgghhii- ----------
+    1 jlmnopqrC? jlmnopqrCC C--------- ----------
+    2 tuvwxyzAB? tuuuvvvwww xxxyyyzzzA AABBB-----
+    3 ---------- ---------- ---------- ----------
+    4 ---------- ---------- ---------- ----------
+    5 ---------- ---------- ---------- ----------
+    6 ---------- ---------- ---------- ----------
+    7 ---------- ---------- ---------- ----------
+    8 ---------- ---------- ---------- ----------
+    9 ---------- ---------- ---------- ----------
+
+5.
+
+swarajd@swarajd-travel:~/prog/systems/3ep/41_fast_file_system_ffs$ ./ffs.py -f in.manyfiles -T -c 
+
+num_groups:       10
+inodes_per_group: 10
+blocks_per_group: 30
+
+free data blocks: 245 (of 300)
+free inodes:      72 (of 100)
+
+spread inodes?    False
+spread data?      False
+contig alloc:     1
+
+      0000000000 0000000000 1111111111 2222222222 
+      0123456789 0123456789 0123456789 0123456789 
+
+group inodes     data
+    0 /abcdefghi /aabbccdde effgghhii- ---------- 
+    1 jlmnopqrC- jlmnopqrCC C--------- ---------- 
+    2 tuvwxyzAB- tuuuvvvwww xxxyyyzzzA AABBB----- 
+    3 ---------- ---------- ---------- ---------- 
+    4 ---------- ---------- ---------- ---------- 
+    5 ---------- ---------- ---------- ---------- 
+    6 ---------- ---------- ---------- ---------- 
+    7 ---------- ---------- ---------- ---------- 
+    8 ---------- ---------- ---------- ---------- 
+    9 ---------- ---------- ---------- ---------- 
+
+span: files
+  file:         /a  filespan:   9
+  file:         /b  filespan:   9
+  file:         /c  filespan:   9
+  file:         /d  filespan:   8
+  file:         /e  filespan:   8
+  file:         /f  filespan:   8
+  file:         /g  filespan:   7
+  file:         /h  filespan:   7
+  file:         /i  filespan:   7
+  file:       /t/u  filespan:  12
+  file:       /j/l  filespan:   7
+  file:       /t/v  filespan:  14
+  file:       /j/m  filespan:   4
+  file:       /t/w  filespan:  16
+  file:       /j/n  filespan:   2
+  file:       /t/x  filespan:  18
+  file:       /j/o  filespan:   0
+  file:       /t/y  filespan:  20
+  file:       /j/p  filespan:   3
+  file:       /t/z  filespan:  22
+  file:       /j/q  filespan:   6
+  file:       /t/A  filespan:  24
+  file:       /j/r  filespan:   8
+  file:       /t/B  filespan:  26
+  file:       /j/C  filespan:  11
+               avg  filespan:  10.84
+
+span: directories
+  dir:           /  dirspan:  52
+  dir:          /j  dirspan:  40
+  dir:          /t  dirspan:  66
+               avg  dirspan:  52.67
+
+FFS does a decent job at reducing dirspan, as most directories are in the same
+group.
+
+6.
+
+This will spread the files out across more groups.
+
+swarajd@swarajd-travel:~/prog/systems/3ep/41_fast_file_system_ffs$ ./ffs.py -f in.manyfiles -T -I 5 -c 
+
+num_groups:       10
+inodes_per_group: 10
+blocks_per_group: 30
+
+free data blocks: 245 (of 300)
+free inodes:      72 (of 100)
+
+spread inodes?    True
+spread data?      False
+contig alloc:     1
+
+      0000000000 0000000000 1111111111 2222222222 
+      0123456789 0123456789 0123456789 0123456789 
+
+group inodes     data
+    0 /jy------- /jyyy----- ---------- ---------- 
+    1 atp------- aatp------ ---------- ---------- 
+    2 buz------- bbuuuzzz-- ---------- ---------- 
+    3 clq------- cclq------ ---------- ---------- 
+    4 dvA------- ddvvvAAA-- ---------- ---------- 
+    5 emr------- eemr------ ---------- ---------- 
+    6 fwB------- ffwwwBBB-- ---------- ---------- 
+    7 gnC------- ggnCCC---- ---------- ---------- 
+    8 hx-------- hhxxx----- ---------- ---------- 
+    9 io-------- iio------- ---------- ---------- 
+
+span: files
+  file:         /a  filespan:  12
+  file:         /b  filespan:  12
+  file:         /c  filespan:  12
+  file:         /d  filespan:  12
+  file:         /e  filespan:  12
+  file:         /f  filespan:  12
+  file:         /g  filespan:  12
+  file:         /h  filespan:  12
+  file:         /i  filespan:  12
+  file:       /t/u  filespan:  14
+  file:       /j/l  filespan:   9
+  file:       /t/v  filespan:  14
+  file:       /j/m  filespan:   9
+  file:       /t/w  filespan:  14
+  file:       /j/n  filespan:   9
+  file:       /t/x  filespan:  14
+  file:       /j/o  filespan:   9
+  file:       /t/y  filespan:   9
+  file:       /j/p  filespan:   7
+  file:       /t/z  filespan:  16
+  file:       /j/q  filespan:   7
+  file:       /t/A  filespan:  16
+  file:       /j/r  filespan:   7
+  file:       /t/B  filespan:  16
+  file:       /j/C  filespan:  11
+               avg  filespan:  11.92
+
+span: directories
+  dir:           /  dirspan: 372
+  dir:          /j  dirspan: 369
+  dir:          /t  dirspan: 329
+               avg  dirspan: 357.11
+
+7.
+
+swarajd@swarajd-travel:~/prog/systems/3ep/41_fast_file_system_ffs$ ./ffs.py -f in.manyfiles -I 5 -A 2 -T -c
+
+num_groups:       10
+inodes_per_group: 10
+blocks_per_group: 30
+
+free data blocks: 245 (of 300)
+free inodes:      72 (of 100)
+
+spread inodes?    True
+spread data?      False
+contig alloc:     1
+
+      0000000000 0000000000 1111111111 2222222222 
+      0123456789 0123456789 0123456789 0123456789 
+
+group inodes     data
+    0 /ejmyr---- /eejmyyyr- ---------- ---------- 
+    1 ---------- ---------- ---------- ---------- 
+    2 aftwpB---- aafftwwwpB BB-------- ---------- 
+    3 ---------- ---------- ---------- ---------- 
+    4 bgunzC---- bbgguuunzz zCCC------ ---------- 
+    5 ---------- ---------- ---------- ---------- 
+    6 chlxq----- cchhlxxxq- ---------- ---------- 
+    7 ---------- ---------- ---------- ---------- 
+    8 divoA----- ddiivvvoAA A--------- ---------- 
+    9 ---------- ---------- ---------- ---------- 
+
+span: files
+  file:         /a  filespan:  12
+  file:         /b  filespan:  12
+  file:         /c  filespan:  12
+  file:         /d  filespan:  12
+  file:         /e  filespan:   9
+  file:         /f  filespan:  12
+  file:         /g  filespan:  12
+  file:         /h  filespan:  12
+  file:         /i  filespan:  12
+  file:       /t/u  filespan:  14
+  file:       /j/l  filespan:   9
+  file:       /t/v  filespan:  14
+  file:       /j/m  filespan:   4
+  file:       /t/w  filespan:  11
+  file:       /j/n  filespan:  11
+  file:       /t/x  filespan:  11
+  file:       /j/o  filespan:  11
+  file:       /t/y  filespan:   6
+  file:       /j/p  filespan:   8
+  file:       /t/z  filespan:  13
+  file:       /j/q  filespan:   8
+  file:       /t/A  filespan:  13
+  file:       /j/r  filespan:   3
+  file:       /t/B  filespan:  10
+  file:       /j/C  filespan:  15
+               avg  filespan:  10.96
+
+span: directories
+  dir:           /  dirspan: 337
+  dir:          /j  dirspan: 336
+  dir:          /t  dirspan: 333
+               avg  dirspan: 335.56
+
+Using this strategy decreases dirspan by roughly 10%
+
+8.
+
+swarajd@swarajd-travel:~/prog/systems/3ep/41_fast_file_system_ffs$ ./ffs.py -f in.fragmented -v -T -c
+op create /a [size:1] -> success
+op create /b [size:1] -> success
+op create /c [size:1] -> success
+op create /d [size:1] -> success
+op create /e [size:1] -> success
+op create /f [size:1] -> success
+op create /g [size:1] -> success
+op create /h [size:1] -> success
+op delete /a -> success
+op delete /c -> success
+op delete /e -> success
+op delete /g -> success
+op create /i [size:8] -> success
+
+num_groups:       10
+inodes_per_group: 10
+blocks_per_group: 30
+
+free data blocks: 287 (of 300)
+free inodes:      94 (of 100)
+
+spread inodes?    False
+spread data?      False
+contig alloc:     1
+
+      0000000000 0000000000 1111111111 2222222222 
+      0123456789 0123456789 0123456789 0123456789 
+
+group inodes     data
+    0 /ib-d-f-h- /ibidifihi iii------- ---------- 
+    1 ---------- ---------- ---------- ---------- 
+    2 ---------- ---------- ---------- ---------- 
+    3 ---------- ---------- ---------- ---------- 
+    4 ---------- ---------- ---------- ---------- 
+    5 ---------- ---------- ---------- ---------- 
+    6 ---------- ---------- ---------- ---------- 
+    7 ---------- ---------- ---------- ---------- 
+    8 ---------- ---------- ---------- ---------- 
+    9 ---------- ---------- ---------- ---------- 
+
+span: files
+  file:         /b  filespan:   4
+  file:         /d  filespan:   0
+  file:         /f  filespan:   6
+  file:         /h  filespan:  11
+  file:         /i  filespan:  33
+               avg  filespan:  11.13
+
+span: directories
+  dir:           /  dirspan:  40
+               avg  dirspan:  40.00
+
+The layout of i is very split out in the group. This can be problematic because 
+reading the whole file won't be that performant.
+
+9.
+
+swarajd@swarajd-travel:~/prog/systems/3ep/41_fast_file_system_ffs$ ./ffs.py -f in.fragmented -v -C 2 -T -c
+op create /a [size:1] -> success
+op create /b [size:1] -> success
+op create /c [size:1] -> success
+op create /d [size:1] -> success
+op create /e [size:1] -> success
+op create /f [size:1] -> success
+op create /g [size:1] -> success
+op create /h [size:1] -> success
+op delete /a -> success
+op delete /c -> success
+op delete /e -> success
+op delete /g -> success
+op create /i [size:8] -> success
+
+num_groups:       10
+inodes_per_group: 10
+blocks_per_group: 30
+
+free data blocks: 287 (of 300)
+free inodes:      94 (of 100)
+
+spread inodes?    False
+spread data?      False
+contig alloc:     2
+
+      0000000000 0000000000 1111111111 2222222222 
+      0123456789 0123456789 0123456789 0123456789 
+
+group inodes     data
+    0 /ib-d-f-h- /-b-d-f-hi iiiiiii--- ---------- 
+    1 ---------- ---------- ---------- ---------- 
+    2 ---------- ---------- ---------- ---------- 
+    3 ---------- ---------- ---------- ---------- 
+    4 ---------- ---------- ---------- ---------- 
+    5 ---------- ---------- ---------- ---------- 
+    6 ---------- ---------- ---------- ---------- 
+    7 ---------- ---------- ---------- ---------- 
+    8 ---------- ---------- ---------- ---------- 
+    9 ---------- ---------- ---------- ---------- 
+
+span: files
+  file:         /b  filespan:   4
+  file:         /d  filespan:   0
+  file:         /f  filespan:   6
+  file:         /h  filespan:  11
+  file:         /i  filespan:  42
+               avg  filespan:  13.00
+
+span: directories
+  dir:           /  dirspan:  47
+               avg  dirspan:  47.33
+
+It changes the allocation of i such that i is all one contiguous file. This 
+strategy also increases the dirspans and filespans.
