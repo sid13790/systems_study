@@ -1,0 +1,532 @@
+1.
+
+swarajd@swarajd-travel:~/prog/systems/3ep/42_fsck_and_journaling$ ./fsck.py -D
+ARG seed 0
+ARG seedCorrupt 0
+ARG numInodes 16
+ARG numData 16
+ARG numRequests 15
+ARG printFinal False
+ARG whichCorrupt -1
+ARG dontCorrupt True
+
+Final state of file system:
+
+inode bitmap 1001001111101001
+inodes       [d a:0 r:3] [] [] [f a:-1 r:1] [] [] [d a:4 r:3] [f a:14 r:1] [d a:1 r:2] [f a:8 r:1] [d a:7 r:2] [] [f a:-1 r:2] [] [] [d a:12 r:4] 
+data bitmap  1100100110001010
+data         [(.,0) (..,0) (i,15) (x,12) (s,7)] [(.,8) (..,15)] [] [] [(.,6) (..,15) (t,10)] [] [] [(.,10) (..,6) (r,12)] [a] [] [] [] [(.,15) (..,0) (l,6) (q,8) (j,3) (c,9)] [] [u] [] 
+
+Can you figure out which files and directories exist?
+
+/
+    i/
+        l/
+            t/
+                r(x)
+        q/
+        j
+        c(a)
+    x(r)
+    s(u)
+
+
+2.
+
+swarajd@swarajd-travel:~/prog/systems/3ep/42_fsck_and_journaling$ ./fsck.py -S 1
+ARG seed 0
+ARG seedCorrupt 1
+ARG numInodes 16
+ARG numData 16
+ARG numRequests 15
+ARG printFinal False
+ARG whichCorrupt -1
+ARG dontCorrupt False
+
+Final state of file system:
+
+inode bitmap 1001001111101001
+inodes       [d a:0 r:3] [] [] [f a:-1 r:0] [] [] [d a:4 r:3] [f a:14 r:1] [d a:1 r:2] [f a:8 r:1] [d a:7 r:2] [] [f a:-1 r:2] [] [] [d a:12 r:4] 
+data bitmap  1100100110001010
+data         [(.,0) (..,0) (i,15) (x,12) (s,7)] [(.,8) (..,15)] [] [] [(.,6) (..,15) (t,10)] [] [] [(.,10) (..,6) (r,12)] [a] [] [] [] [(.,15) (..,0) (l,6) (q,8) (j,3) (c,9)] [] [u] [] 
+
+Can you figure out how the file system was corrupted?
+
+/
+    i/
+        l/
+        q/
+        j
+        c
+    x
+    s
+
+The inode at index 3 thinks that it has 0 references to it, when the file "j"
+is at least one reference
+
+3.
+
+swarajd@swarajd-travel:~/prog/systems/3ep/42_fsck_and_journaling$ ./fsck.py -S 3
+ARG seed 0
+ARG seedCorrupt 3
+ARG numInodes 16
+ARG numData 16
+ARG numRequests 15
+ARG printFinal False
+ARG whichCorrupt -1
+ARG dontCorrupt False
+
+Final state of file system:
+
+inode bitmap 1001001111101001
+inodes       [d a:0 r:3] [] [] [f a:-1 r:1] [] [] [d a:4 r:3] [f a:14 r:1] [d a:1 r:2] [f a:8 r:1] [d a:7 r:2] [f a:-1 r:1] [f a:-1 r:2] [] [] [d a:12 r:4] 
+data bitmap  1100100110001010
+data         [(.,0) (..,0) (i,15) (x,12) (s,7)] [(.,8) (..,15)] [] [] [(.,6) (..,15) (t,10)] [] [] [(.,10) (..,6) (r,12)] [a] [] [] [] [(.,15) (..,0) (l,6) (q,8) (j,3) (c,9)] [] [u] [] 
+
+Can you figure out how the file system was corrupted?
+
+There is an orphan inode at bit 11.
+
+4.
+
+swarajd@swarajd-travel:~/prog/systems/3ep/42_fsck_and_journaling$ ./fsck.py -S 5
+ARG seed 0
+ARG seedCorrupt 5
+ARG numInodes 16
+ARG numData 16
+ARG numRequests 15
+ARG printFinal False
+ARG whichCorrupt -1
+ARG dontCorrupt False
+
+Final state of file system:
+
+inode bitmap 1001001111101001
+inodes       [d a:0 r:3] [] [] [f a:-1 r:1] [d a:-1 r:1] [] [d a:4 r:3] [f a:14 r:1] [d a:1 r:2] [f a:8 r:1] [d a:7 r:2] [] [f a:-1 r:2] [] [] [d a:12 r:4] 
+data bitmap  1100100110001010
+data         [(.,0) (..,0) (i,15) (x,12) (s,7)] [(.,8) (..,15)] [] [] [(.,6) (..,15) (t,10)] [] [] [(.,10) (..,6) (r,12)] [a] [] [] [] [(.,15) (..,0) (l,6) (q,8) (j,3) (c,9)] [] [u] [] 
+
+Can you figure out how the file system was corrupted?
+
+There's an orphan inode at bit 4. If detected, just delete the inode. 
+
+swarajd@swarajd-travel:~/prog/systems/3ep/42_fsck_and_journaling$ ./fsck.py -S 38
+ARG seed 0
+ARG seedCorrupt 38
+ARG numInodes 16
+ARG numData 16
+ARG numRequests 15
+ARG printFinal False
+ARG whichCorrupt -1
+ARG dontCorrupt False
+
+Final state of file system:
+
+inode bitmap 1001001111101001
+inodes       [d a:0 r:3] [] [] [f a:-1 r:1] [] [] [d a:4 r:3] [f a:14 r:1] [d a:1 r:2] [f a:8 r:1] [d a:11 r:2] [] [f a:-1 r:2] [] [] [d a:12 r:4] 
+data bitmap  1100100110001010
+data         [(.,0) (..,0) (i,15) (x,12) (s,7)] [(.,8) (..,15)] [] [] [(.,6) (..,15) (t,10)] [] [] [(.,10) (..,6) (r,12)] [a] [] [] [] [(.,15) (..,0) (l,6) (q,8) (j,3) (c,9)] [] [u] [] 
+
+Can you figure out how the file system was corrupted?
+
+The inode at index 10 points to an empty block. This is definitely harder to 
+detect as you have to make sure the address pointed to is correct.
+
+swarajd@swarajd-travel:~/prog/systems/3ep/42_fsck_and_journaling$ ./fsck.py -S 642
+ARG seed 0
+ARG seedCorrupt 642
+ARG numInodes 16
+ARG numData 16
+ARG numRequests 15
+ARG printFinal False
+ARG whichCorrupt -1
+ARG dontCorrupt False
+
+Final state of file system:
+
+inode bitmap 1001001111101001
+inodes       
+[d a:0 r:3] 
+[] 
+[] 
+[f a:-1 r:1] 
+[] 
+[] 
+[d a:4 r:3] 
+[f a:14 r:1] 
+[d a:11 r:2] 
+[f a:8 r:1] 
+[d a:7 r:2] 
+[] 
+[f a:-1 r:2] 
+[] 
+[] 
+[d a:12 r:4] 
+
+data bitmap  1100100110001010
+data         
+
+[(.,0) (..,0) (i,15) (x,12) (s,7)] 
+[(.,8) (..,15)] 
+[] 
+[] 
+[(.,6) (..,15) (t,10)] 
+[] 
+[] 
+[(.,10) (..,6) (r,12)] 
+[a] 
+[] 
+[] 
+[] 
+[(.,15) (..,0) (l,6) (q,8) (j,3) (c,9)] 
+[] 
+[u] 
+[] 
+
+Can you figure out how the file system was corrupted?
+
+/
+    i/
+        l/
+            t
+        q/
+
+        j
+        c
+    x
+    s(u)
+
+The issue is q points to an empty block. You would fix it by finding the block 
+or directory which has a pointer to this inode and setting the inode to point to
+that block.
+
+5.
+
+swarajd@swarajd-travel:~/prog/systems/3ep/42_fsck_and_journaling$ ./fsck.py -S 6
+ARG seed 0
+ARG seedCorrupt 6
+ARG numInodes 16
+ARG numData 16
+ARG numRequests 15
+ARG printFinal False
+ARG whichCorrupt -1
+ARG dontCorrupt False
+
+Final state of file system:
+
+inode bitmap 1001001111101001
+inodes       [d a:0 r:3] [] [] [f a:-1 r:1] [] [] [d a:4 r:3] [f a:14 r:1] [d a:1 r:2] [f a:8 r:1] [d a:7 r:2] [] [f a:-1 r:2] [] [d a:-1 r:1] [d a:12 r:4] 
+data bitmap  1100100110001010
+data         [(.,0) (..,0) (i,15) (x,12) (s,7)] [(.,8) (..,15)] [] [] [(.,6) (..,15) (t,10)] [] [] [(.,10) (..,6) (r,12)] [a] [] [] [] [(.,15) (..,0) (l,6) (q,8) (j,3) (c,9)] [] [u] [] 
+
+Can you figure out how the file system was corrupted?
+
+The 14th inode is an orphan. Just delete the inode.
+
+6.
+
+swarajd@swarajd-travel:~/prog/systems/3ep/42_fsck_and_journaling$ ./fsck.py -S 9 
+ARG seed 0
+ARG seedCorrupt 9
+ARG numInodes 16
+ARG numData 16
+ARG numRequests 15
+ARG printFinal False
+ARG whichCorrupt -1
+ARG dontCorrupt False
+
+Final state of file system:
+
+inode bitmap 1001001111101001
+inodes       
+[d a:0 r:3] 
+[] 
+[] 
+[f a:-1 r:1] 
+[] 
+[] 
+[d a:4 r:3] 
+[f a:14 r:1] 
+[d a:1 r:2] 
+[f a:8 r:1] 
+[d a:7 r:2] 
+[] 
+[f a:-1 r:2] 
+[] 
+[] 
+[d a:12 r:4] 
+data bitmap  1100100110001010
+data         
+[(.,0) (..,0) (i,15) (x,12) (s,7)] 
+[(.,8) (..,15)] 
+[] 
+[] 
+[(.,6) (..,15) (t,10)] 
+[] 
+[] 
+[(.,10) (..,6) (r,12)] 
+[a] 
+[] 
+[] 
+[] 
+[(.,15) (..,0) (i,6) (q,8) (j,3) (c,9)] 
+[] 
+[u] 
+[] 
+
+Can you figure out how the file system was corrupted?
+
+/
+    i/
+        i/
+            t/
+                r(x)
+        q/
+        j
+        c(a)
+    x(r)
+    s(u)
+
+directory "l" was renamed to "i". The tool can't really do much because this
+just seems like a normal rename.
+
+7.
+
+swarajd@swarajd-travel:~/prog/systems/3ep/42_fsck_and_journaling$ ./fsck.py -S 15
+ARG seed 0
+ARG seedCorrupt 15
+ARG numInodes 16
+ARG numData 16
+ARG numRequests 15
+ARG printFinal False
+ARG whichCorrupt -1
+ARG dontCorrupt False
+
+Final state of file system:
+
+inode bitmap 1001001111101001
+inodes       
+
+[d a:0 r:3] 
+[f a:-1 r:1] 
+[] 
+[f a:-1 r:1] 
+[] 
+[] 
+[d a:4 r:3] 
+[f a:14 r:1] 
+[d a:1 r:2] 
+[f a:8 r:1] 
+[d a:7 r:2] 
+[] 
+[f a:-1 r:2] 
+[] 
+[] 
+[d a:12 r:4] 
+
+data bitmap  1100100110001010
+data         
+
+[(.,0) (..,0) (i,15) (x,12) (s,7)] 
+[(.,8) (..,15)] 
+[] 
+[] 
+[(.,6) (..,15) (t,10)] 
+[] 
+[] 
+[(.,10) (..,6) (r,12)] 
+[a] 
+[] 
+[] 
+[] 
+[(.,15) (..,0) (l,6) (q,8) (j,3) (c,9)] 
+[] 
+[u] 
+[] 
+
+Can you figure out how the file system was corrupted?
+
+There's an orphan inode at index 1. No data was lost, really. It was just the 
+one inode.
+
+8.
+
+swarajd@swarajd-travel:~/prog/systems/3ep/42_fsck_and_journaling$ ./fsck.py -S 10
+ARG seed 0
+ARG seedCorrupt 10
+ARG numInodes 16
+ARG numData 16
+ARG numRequests 15
+ARG printFinal False
+ARG whichCorrupt -1
+ARG dontCorrupt False
+
+Final state of file system:
+
+inode bitmap 1001001111101001
+inodes       
+
+
+[d a:0 r:3] 
+[d a:-1 r:1] 
+[] 
+[f a:-1 r:1] 
+[] 
+[] 
+[d a:4 r:3] 
+[f a:14 r:1] 
+[d a:1 r:2] 
+[f a:8 r:1] 
+[d a:7 r:2] 
+[] 
+[f a:-1 r:2] 
+[] 
+[] 
+[d a:12 r:4] 
+
+data bitmap  1100100110001010
+data     
+
+[(.,0) (..,0) (i,15) (x,12) (s,7)] 
+[(.,8) (..,15)] 
+[] 
+[] 
+[(.,6) (..,15) (t,10)] 
+[] 
+[] 
+[(.,10) (..,6) (r,12)] 
+[a] 
+[] 
+[] 
+[] 
+[(.,15) (..,0) (l,6) (q,8) (j,3) (c,9)] 
+[] 
+[u] 
+[] 
+
+Can you figure out how the file system was corrupted?
+
+Orphan inode at index 1. Just delete the inode.
+
+9.
+
+swarajd@swarajd-travel:~/prog/systems/3ep/42_fsck_and_journaling$ ./fsck.py -S 16
+ARG seed 0
+ARG seedCorrupt 16
+ARG numInodes 16
+ARG numData 16
+ARG numRequests 15
+ARG printFinal False
+ARG whichCorrupt -1
+ARG dontCorrupt False
+
+Final state of file system:
+
+inode bitmap 1001001111101001
+inodes       
+
+
+
+[d a:0 r:3] 
+[] 
+[] 
+[f a:-1 r:1] 
+[] 
+[] 
+[d a:4 r:3] 
+[f a:14 r:1] 
+[d a:1 r:2] 
+[f a:8 r:1] 
+[d a:7 r:2] 
+[] 
+[d a:-1 r:2] 
+[] 
+[] 
+[d a:12 r:4] 
+
+data bitmap  1100100110001010
+data         
+
+[(.,0) (..,0) (i,15) (x,12) (s,7)] 
+[(.,8) (..,15)] 
+[] 
+[] 
+[(.,6) (..,15) (t,10)] 
+[] 
+[] 
+[(.,10) (..,6) (r,12)] 
+[a] 
+[] 
+[] 
+[] 
+[(.,15) (..,0) (l,6) (q,8) (j,3) (c,9)] 
+[] 
+[u] 
+[] 
+
+Can you figure out how the file system was corrupted?
+
+The inode at index 12 should be a file instead of a directory. 
+
+swarajd@swarajd-travel:~/prog/systems/3ep/42_fsck_and_journaling$ ./fsck.py -S 20
+ARG seed 0
+ARG seedCorrupt 20
+ARG numInodes 16
+ARG numData 16
+ARG numRequests 15
+ARG printFinal False
+ARG whichCorrupt -1
+ARG dontCorrupt False
+
+Final state of file system:
+
+inode bitmap 1001001111101001
+inodes       
+
+
+
+
+
+[d a:0 r:3] 
+[] 
+[] 
+[f a:-1 r:1] 
+[] 
+[] 
+[f a:4 r:3] 
+[f a:14 r:1] 
+[d a:1 r:2] 
+[f a:8 r:1] 
+[d a:7 r:2] 
+[] 
+[f a:-1 r:2] 
+[] 
+[] 
+[d a:12 r:4] 
+
+data bitmap  1100100110001010
+data         
+
+[(.,0) (..,0) (i,15) (x,12) (s,7)] 
+[(.,8) (..,15)] 
+[] 
+[] 
+[(.,6) (..,15) (t,10)] 
+[] 
+[] 
+[(.,10) (..,6) (r,12)] 
+[a] 
+[] 
+[] 
+[] 
+[(.,15) (..,0) (l,6) (q,8) (j,3) (c,9)] 
+[] 
+[u] 
+[] 
+
+Can you figure out how the file system was corrupted?
+
+The inode at index 6 should be a directory instead of a file.
+
+The repair tool should check to see if any other directories have a . or .. that
+refers to the "file", and if so, change it to a directory.
