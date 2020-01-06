@@ -1,0 +1,740 @@
+1.
+
+(3ep) swarajd@swarajd-travel:~/prog/systems/3ep/43_log_structured_file_system_LFS$ ./lfs.py -n 3
+
+INITIAL file system contents:
+[   0 ] live checkpoint: 3 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   1 ] live [.,0] [..,0] -- -- -- -- -- -- 
+[   2 ] live type:dir size:1 refs:2 ptrs: 1 -- -- -- -- -- -- -- 
+[   3 ] live chunk(imap): 2 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+
+command? create file /ku3
+command? append to file /ku3 offset=7,size=4
+command? create file /qg9
+
+FINAL file system contents:
+[   0 ] live checkpoint: 14 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   1 ]  ?   [.,0] [..,0] -- -- -- -- -- -- 
+[   2 ]  ?   type:dir size:1 refs:2 ptrs: 1 -- -- -- -- -- -- -- 
+[   3 ]  ?   chunk(imap): 2 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   4 ]  ?   [.,0] [..,0] [ku3,1] -- -- -- -- -- 
+[   5 ]  ?   type:dir size:1 refs:2 ptrs: 4 -- -- -- -- -- -- -- 
+[   6 ]  ?   type:reg size:0 refs:1 ptrs: -- -- -- -- -- -- -- -- 
+[   7 ]  ?   chunk(imap): 5 6 -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   8 ] live z0z0z0z0z0z0z0z0z0z0z0z0z0z0z0z0
+[   9 ] live type:reg size:8 refs:1 ptrs: -- -- -- -- -- -- -- 8 
+[  10 ]  ?   chunk(imap): 5 9 -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[  11 ] live [.,0] [..,0] [ku3,1] [qg9,2] -- -- -- -- 
+[  12 ] live type:dir size:1 refs:2 ptrs: 11 -- -- -- -- -- -- -- 
+[  13 ] live type:reg size:0 refs:1 ptrs: -- -- -- -- -- -- -- -- 
+[  14 ] live chunk(imap): 12 9 13 -- -- -- -- -- -- -- -- -- -- -- -- -- 
+
+
+(3ep) swarajd@swarajd-travel:~/prog/systems/3ep/43_log_structured_file_system_LFS$ ./lfs.py -n 5
+
+INITIAL file system contents:
+[   0 ] live checkpoint: 3 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   1 ] live [.,0] [..,0] -- -- -- -- -- -- 
+[   2 ] live type:dir size:1 refs:2 ptrs: 1 -- -- -- -- -- -- -- 
+[   3 ] live chunk(imap): 2 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+
+command? create file /ku3
+command? write  file /ku3, offset=7,size=4
+command? create file /qg9
+command? link   file /is8
+command? create dir  /cl6
+
+FINAL file system contents:
+[   0 ] live checkpoint: 23 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   1 ]  ?   [.,0] [..,0] -- -- -- -- -- -- 
+[   2 ]  ?   type:dir size:1 refs:2 ptrs: 1 -- -- -- -- -- -- -- 
+[   3 ]  ?   chunk(imap): 2 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   4 ]  ?   [.,0] [..,0] [ku3,1] -- -- -- -- -- 
+[   5 ]  ?   type:dir size:1 refs:2 ptrs: 4 -- -- -- -- -- -- -- 
+[   6 ]  ?   type:reg size:0 refs:1 ptrs: -- -- -- -- -- -- -- -- 
+[   7 ]  ?   chunk(imap): 5 6 -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   8 ] live x0x0x0x0x0x0x0x0x0x0x0x0x0x0x0x0
+[   9 ] live type:reg size:8 refs:1 ptrs: -- -- -- -- -- -- -- 8 
+[  10 ]  ?   chunk(imap): 5 9 -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[  11 ]  ?   [.,0] [..,0] [ku3,1] [qg9,2] -- -- -- -- 
+[  12 ]  ?   type:dir size:1 refs:2 ptrs: 11 -- -- -- -- -- -- -- 
+[  13 ]  ?   type:reg size:0 refs:1 ptrs: -- -- -- -- -- -- -- -- 
+[  14 ]  ?   chunk(imap): 12 9 13 -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[  15 ]  ?   [.,0] [..,0] [ku3,1] [qg9,2] [is8,2] -- -- -- 
+[  16 ]  ?   type:dir size:1 refs:2 ptrs: 15 -- -- -- -- -- -- -- 
+[  17 ] live type:reg size:0 refs:2 ptrs: -- -- -- -- -- -- -- -- 
+[  18 ]  ?   chunk(imap): 16 9 17 -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[  19 ] live [.,0] [..,0] [ku3,1] [qg9,2] [is8,2] [cl6,3] -- -- 
+[  20 ] live [.,3] [..,0] -- -- -- -- -- -- 
+[  21 ] live type:dir size:1 refs:3 ptrs: 19 -- -- -- -- -- -- -- 
+[  22 ] live type:dir size:1 refs:2 ptrs: 20 -- -- -- -- -- -- -- 
+[  23 ] live chunk(imap): 21 9 17 22 -- -- -- -- -- -- -- -- -- -- -- --
+
+2.
+
+(3ep) swarajd@swarajd-travel:~/prog/systems/3ep/43_log_structured_file_system_LFS$ ./lfs.py -n 3 -i -s 3
+
+INITIAL file system contents:
+[   0 ] live checkpoint: 3 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   1 ] live [.,0] [..,0] -- -- -- -- -- -- 
+[   2 ] live type:dir size:1 refs:2 ptrs: 1 -- -- -- -- -- -- -- 
+[   3 ] live chunk(imap): 2 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+
+command? create file /jp6
+
+[   0 ]  ?   checkpoint: 7 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+...
+[   4 ]  ?   [.,0] [..,0] [jp6,1] -- -- -- -- -- 
+[   5 ]  ?   type:dir size:1 refs:2 ptrs: 4 -- -- -- -- -- -- -- 
+[   6 ]  ?   type:reg size:0 refs:1 ptrs: -- -- -- -- -- -- -- -- 
+[   7 ]  ?   chunk(imap): 5 6 -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+
+
+command? create file /vg2
+
+[   0 ]  ?   checkpoint: 11 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+...
+[   8 ]  ?   [.,0] [..,0] [jp6,1] [vg2,2] -- -- -- -- 
+[   9 ]  ?   type:dir size:1 refs:2 ptrs: 8 -- -- -- -- -- -- -- 
+[  10 ]  ?   type:reg size:0 refs:1 ptrs: -- -- -- -- -- -- -- -- 
+[  11 ]  ?   chunk(imap): 9 6 10 -- -- -- -- -- -- -- -- -- -- -- -- -- 
+
+
+command? link file /jp6 /mq1
+
+[   0 ]  ?   checkpoint: 15 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+...
+[  12 ]  ?   [.,0] [..,0] [jp6,1] [vg2,2] [mq1,1] -- -- -- 
+[  13 ]  ?   type:dir size:1 refs:2 ptrs: 12 -- -- -- -- -- -- -- 
+[  14 ]  ?   type:reg size:0 refs:2 ptrs: -- -- -- -- -- -- -- -- 
+[  15 ]  ?   chunk(imap): 13 14 10 -- -- -- -- -- -- -- -- -- -- -- -- -- 
+
+
+
+FINAL file system contents:
+[   0 ] live checkpoint: 15 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   1 ]  ?   [.,0] [..,0] -- -- -- -- -- -- 
+[   2 ]  ?   type:dir size:1 refs:2 ptrs: 1 -- -- -- -- -- -- -- 
+[   3 ]  ?   chunk(imap): 2 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   4 ]  ?   [.,0] [..,0] [jp6,1] -- -- -- -- -- 
+[   5 ]  ?   type:dir size:1 refs:2 ptrs: 4 -- -- -- -- -- -- -- 
+[   6 ]  ?   type:reg size:0 refs:1 ptrs: -- -- -- -- -- -- -- -- 
+[   7 ]  ?   chunk(imap): 5 6 -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   8 ]  ?   [.,0] [..,0] [jp6,1] [vg2,2] -- -- -- -- 
+[   9 ]  ?   type:dir size:1 refs:2 ptrs: 8 -- -- -- -- -- -- -- 
+[  10 ] live type:reg size:0 refs:1 ptrs: -- -- -- -- -- -- -- -- 
+[  11 ]  ?   chunk(imap): 9 6 10 -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[  12 ] live [.,0] [..,0] [jp6,1] [vg2,2] [mq1,1] -- -- -- 
+[  13 ] live type:dir size:1 refs:2 ptrs: 12 -- -- -- -- -- -- -- 
+[  14 ] live type:reg size:0 refs:2 ptrs: -- -- -- -- -- -- -- -- 
+[  15 ] live chunk(imap): 13 14 10 -- -- -- -- -- -- -- -- -- -- -- -- -- 
+
+3.
+
+(3ep) swarajd@swarajd-travel:~/prog/systems/3ep/43_log_structured_file_system_LFS$ ./lfs.py -o -F -s 100
+
+INITIAL file system contents:
+[   0 ] live checkpoint: 3 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   1 ] live [.,0] [..,0] -- -- -- -- -- -- 
+[   2 ] live type:dir size:1 refs:2 ptrs: 1 -- -- -- -- -- -- -- 
+[   3 ] live chunk(imap): 2 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+
+create file /us7 
+write file  /us7 offset=4 size=0 
+write file  /us7 offset=7 size=7 
+
+[   0 ]      checkpoint: 14 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   1 ]      [.,0] [..,0] -- -- -- -- -- -- 
+[   2 ]      type:dir size:1 refs:2 ptrs: 1 -- -- -- -- -- -- -- 
+[   3 ]      chunk(imap): 2 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   4 ] live [.,0] [..,0] [us7,1]
+[   5 ] live type:dir size:1 refs:2 ptrs: 1 -- -- -- -- -- -- -- 
+[   6 ]      type:reg size:0 refs:1 ptrs: -- -- -- -- -- -- -- -- 
+[   7 ]      chunk(imap): 5 6 -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   8 ]      type:reg size:8 refs:1 ptrs: -- -- -- -- -- -- -- --
+[   9 ]      chunk(imap): 5 8 -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[  10 ]      x0x0x0x0x0x0x0x0x0x0x0x0x0x0x0x0
+[  11 ]      type:reg size:8 refs:1 ptrs: -- -- -- -- -- -- -- 10
+[  12 ]      chunk(imap): 5 11 -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+
+4.
+
+(3ep) swarajd@swarajd-travel:~/prog/systems/3ep/43_log_structured_file_system_LFS$ ./lfs.py -n 20 -s 1
+
+INITIAL file system contents:
+[   0 ] live checkpoint: 3 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   1 ] live [.,0] [..,0] -- -- -- -- -- -- 
+[   2 ] live type:dir size:1 refs:2 ptrs: 1 -- -- -- -- -- -- -- 
+[   3 ] live chunk(imap): 2 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+
+command? 
+command? 
+command? 
+command? 
+command? 
+command? 
+command? 
+command? 
+command? 
+command? 
+command? 
+command? 
+command? 
+command? 
+command? 
+command? 
+command? 
+command? 
+command? 
+command? 
+
+FINAL file system contents:
+[   0 ]  ?   checkpoint: 99 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   1 ]  ?   [.,0] [..,0] -- -- -- -- -- -- 
+[   2 ]  ?   type:dir size:1 refs:2 ptrs: 1 -- -- -- -- -- -- -- 
+[   3 ]  ?   chunk(imap): 2 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   4 ]  ?   [.,0] [..,0] [tg4,1] -- -- -- -- -- 
+[   5 ]  ?   type:dir size:1 refs:2 ptrs: 4 -- -- -- -- -- -- -- 
+[   6 ]  ?   type:reg size:0 refs:1 ptrs: -- -- -- -- -- -- -- -- 
+[   7 ]  ?   chunk(imap): 5 6 -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   8 ]  ?   type:reg size:6 refs:1 ptrs: -- -- -- -- -- -- -- -- 
+[   9 ]  ?   chunk(imap): 5 8 -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[  10 ]  ?   [.,0] [..,0] [tg4,1] [lt0,2] -- -- -- -- 
+[  11 ]  ?   type:dir size:1 refs:2 ptrs: 10 -- -- -- -- -- -- -- 
+[  12 ]  ?   type:reg size:0 refs:1 ptrs: -- -- -- -- -- -- -- -- 
+[  13 ]  ?   chunk(imap): 11 8 12 -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[  14 ]  ?   n0n0n0n0n0n0n0n0n0n0n0n0n0n0n0n0
+[  15 ]  ?   y1y1y1y1y1y1y1y1y1y1y1y1y1y1y1y1
+[  16 ]  ?   p2p2p2p2p2p2p2p2p2p2p2p2p2p2p2p2
+[  17 ]  ?   l3l3l3l3l3l3l3l3l3l3l3l3l3l3l3l3
+[  18 ]  ?   h4h4h4h4h4h4h4h4h4h4h4h4h4h4h4h4
+[  19 ]  ?   o5o5o5o5o5o5o5o5o5o5o5o5o5o5o5o5
+[  20 ]  ?   y6y6y6y6y6y6y6y6y6y6y6y6y6y6y6y6
+[  21 ]  ?   type:reg size:8 refs:1 ptrs: -- 14 15 16 17 18 19 20 
+[  22 ]  ?   chunk(imap): 11 8 21 -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[  23 ]  ?   [.,0] [..,0] [tg4,1] [lt0,2] [oy3,1] -- -- -- 
+[  24 ]  ?   type:dir size:1 refs:2 ptrs: 23 -- -- -- -- -- -- -- 
+[  25 ]  ?   type:reg size:6 refs:2 ptrs: -- -- -- -- -- -- -- -- 
+[  26 ]  ?   chunk(imap): 24 25 21 -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[  27 ]  ?   [.,0] [..,0] [tg4,1] [lt0,2] [oy3,1] [af4,3] -- -- 
+[  28 ]  ?   type:dir size:1 refs:2 ptrs: 27 -- -- -- -- -- -- -- 
+[  29 ]  ?   type:reg size:0 refs:1 ptrs: -- -- -- -- -- -- -- -- 
+[  30 ]  ?   chunk(imap): 28 25 21 29 -- -- -- -- -- -- -- -- -- -- -- -- 
+[  31 ]  ?   a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0
+[  32 ]  ?   type:reg size:2 refs:2 ptrs: -- 31 -- -- -- -- -- -- 
+[  33 ]  ?   chunk(imap): 28 32 21 29 -- -- -- -- -- -- -- -- -- -- -- -- 
+[  34 ]  ?   u0u0u0u0u0u0u0u0u0u0u0u0u0u0u0u0
+[  35 ]  ?   v1v1v1v1v1v1v1v1v1v1v1v1v1v1v1v1
+[  36 ]  ?   x2x2x2x2x2x2x2x2x2x2x2x2x2x2x2x2
+[  37 ]  ?   t3t3t3t3t3t3t3t3t3t3t3t3t3t3t3t3
+[  38 ]  ?   v4v4v4v4v4v4v4v4v4v4v4v4v4v4v4v4
+[  39 ]  ?   n5n5n5n5n5n5n5n5n5n5n5n5n5n5n5n5
+[  40 ]  ?   type:reg size:6 refs:1 ptrs: 34 35 36 37 38 39 19 20 
+[  41 ]  ?   chunk(imap): 28 32 40 29 -- -- -- -- -- -- -- -- -- -- -- -- 
+[  42 ]  ?   o0o0o0o0o0o0o0o0o0o0o0o0o0o0o0o0
+[  43 ]  ?   l1l1l1l1l1l1l1l1l1l1l1l1l1l1l1l1
+[  44 ]  ?   b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2
+[  45 ]  ?   w3w3w3w3w3w3w3w3w3w3w3w3w3w3w3w3
+[  46 ]  ?   o4o4o4o4o4o4o4o4o4o4o4o4o4o4o4o4
+[  47 ]  ?   f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5
+[  48 ]  ?   n6n6n6n6n6n6n6n6n6n6n6n6n6n6n6n6
+[  49 ]  ?   type:reg size:8 refs:2 ptrs: -- 42 43 44 45 46 47 48 
+[  50 ]  ?   chunk(imap): 28 49 40 29 -- -- -- -- -- -- -- -- -- -- -- -- 
+[  51 ]  ?   [.,0] [..,0] -- [lt0,2] [oy3,1] [af4,3] -- -- 
+[  52 ]  ?   type:dir size:1 refs:2 ptrs: 51 -- -- -- -- -- -- -- 
+[  53 ]  ?   type:reg size:8 refs:1 ptrs: -- 42 43 44 45 46 47 48 
+[  54 ]  ?   chunk(imap): 52 53 40 29 -- -- -- -- -- -- -- -- -- -- -- -- 
+[  55 ]  ?   m0m0m0m0m0m0m0m0m0m0m0m0m0m0m0m0
+[  56 ]  ?   j1j1j1j1j1j1j1j1j1j1j1j1j1j1j1j1
+[  57 ]  ?   i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2
+[  58 ]  ?   type:reg size:8 refs:1 ptrs: -- -- -- -- -- 55 56 57 
+[  59 ]  ?   chunk(imap): 52 53 40 58 -- -- -- -- -- -- -- -- -- -- -- -- 
+[  60 ]  ?   a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0
+[  61 ]  ?   f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1
+[  62 ]  ?   type:reg size:7 refs:1 ptrs: -- -- -- -- -- 60 61 57 
+[  63 ]  ?   chunk(imap): 52 53 40 62 -- -- -- -- -- -- -- -- -- -- -- -- 
+[  64 ]  ?   e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0
+[  65 ]  ?   p1p1p1p1p1p1p1p1p1p1p1p1p1p1p1p1
+[  66 ]  ?   type:reg size:8 refs:1 ptrs: -- -- -- -- -- 60 64 65 
+[  67 ]  ?   chunk(imap): 52 53 40 66 -- -- -- -- -- -- -- -- -- -- -- -- 
+[  68 ]  ?   u0u0u0u0u0u0u0u0u0u0u0u0u0u0u0u0
+[  69 ]  ?   v1v1v1v1v1v1v1v1v1v1v1v1v1v1v1v1
+[  70 ]  ?   g2g2g2g2g2g2g2g2g2g2g2g2g2g2g2g2
+[  71 ]  ?   v3v3v3v3v3v3v3v3v3v3v3v3v3v3v3v3
+[  72 ]  ?   r4r4r4r4r4r4r4r4r4r4r4r4r4r4r4r4
+[  73 ]  ?   c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5
+[  74 ]  ?   type:reg size:7 refs:1 ptrs: 34 68 69 70 71 72 73 20 
+[  75 ]  ?   chunk(imap): 52 53 74 66 -- -- -- -- -- -- -- -- -- -- -- -- 
+[  76 ]  ?   a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0
+[  77 ]  ?   a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1
+[  78 ]  ?   t2t2t2t2t2t2t2t2t2t2t2t2t2t2t2t2
+[  79 ]  ?   g3g3g3g3g3g3g3g3g3g3g3g3g3g3g3g3
+[  80 ]  ?   type:reg size:8 refs:1 ptrs: 34 68 69 70 76 77 78 79 
+[  81 ]  ?   chunk(imap): 52 53 80 66 -- -- -- -- -- -- -- -- -- -- -- -- 
+[  82 ]  ?   [.,0] [..,0] [ln7,4] [lt0,2] [oy3,1] [af4,3] -- -- 
+[  83 ]  ?   [.,4] [..,0] -- -- -- -- -- -- 
+[  84 ]  ?   type:dir size:1 refs:3 ptrs: 82 -- -- -- -- -- -- -- 
+[  85 ]  ?   type:dir size:1 refs:2 ptrs: 83 -- -- -- -- -- -- -- 
+[  86 ]  ?   chunk(imap): 84 53 80 66 85 -- -- -- -- -- -- -- -- -- -- -- 
+[  87 ]  ?   type:reg size:3 refs:1 ptrs: -- 42 43 44 45 46 47 48 
+[  88 ]  ?   chunk(imap): 84 87 80 66 85 -- -- -- -- -- -- -- -- -- -- -- 
+[  89 ]  ?   [.,4] [..,0] [zp3,5] -- -- -- -- -- 
+[  90 ]  ?   type:dir size:1 refs:2 ptrs: 89 -- -- -- -- -- -- -- 
+[  91 ]  ?   type:reg size:0 refs:1 ptrs: -- -- -- -- -- -- -- -- 
+[  92 ]  ?   chunk(imap): 84 87 80 66 90 91 -- -- -- -- -- -- -- -- -- -- 
+[  93 ]  ?   [.,4] [..,0] [zp3,5] [zu5,6] -- -- -- -- 
+[  94 ]  ?   type:dir size:1 refs:2 ptrs: 93 -- -- -- -- -- -- -- 
+[  95 ]  ?   type:reg size:0 refs:1 ptrs: -- -- -- -- -- -- -- -- 
+[  96 ]  ?   chunk(imap): 84 87 80 66 94 91 95 -- -- -- -- -- -- -- -- -- 
+[  97 ]  ?   [.,0] [..,0] [ln7,4] [lt0,2] -- [af4,3] -- -- 
+[  98 ]  ?   type:dir size:1 refs:3 ptrs: 97 -- -- -- -- -- -- -- 
+[  99 ]  ?   chunk(imap): 98 -- 80 66 94 91 95 -- -- -- -- -- -- -- -- --
+
+
+valid tree:
+
+/
+    ln7/
+        zp3
+        zu5
+    lt0
+    af4
+
+
+5.
+
+(3ep) swarajd@swarajd-travel:~/prog/systems/3ep/43_log_structured_file_system_LFS$ ./lfs.py -L c,/foo:w,/foo,0,1:w,/foo,1,1:w,/foo,2,1:w,/foo,3,1 -o 
+INITIAL file system contents:
+[   0 ] live checkpoint: 3 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   1 ] live [.,0] [..,0] -- -- -- -- -- -- 
+[   2 ] live type:dir size:1 refs:2 ptrs: 1 -- -- -- -- -- -- -- 
+[   3 ] live chunk(imap): 2 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+
+create file /foo 
+write file  /foo offset=0 size=1 
+write file  /foo offset=1 size=1 
+write file  /foo offset=2 size=1 
+write file  /foo offset=3 size=1 
+
+FINAL file system contents:
+[   0 ] live checkpoint: 19 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   1 ]  ?   [.,0] [..,0] -- -- -- -- -- -- 
+[   2 ]  ?   type:dir size:1 refs:2 ptrs: 1 -- -- -- -- -- -- -- 
+[   3 ]  ?   chunk(imap): 2 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   4 ] live [.,0] [..,0] [foo,1] -- -- -- -- -- 
+[   5 ] live type:dir size:1 refs:2 ptrs: 4 -- -- -- -- -- -- -- 
+[   6 ]  ?   type:reg size:0 refs:1 ptrs: -- -- -- -- -- -- -- -- 
+[   7 ]  ?   chunk(imap): 5 6 -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   8 ] live v0v0v0v0v0v0v0v0v0v0v0v0v0v0v0v0
+[   9 ]  ?   type:reg size:1 refs:1 ptrs: 8 -- -- -- -- -- -- -- 
+[  10 ]  ?   chunk(imap): 5 9 -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[  11 ] live t0t0t0t0t0t0t0t0t0t0t0t0t0t0t0t0
+[  12 ]  ?   type:reg size:2 refs:1 ptrs: 8 11 -- -- -- -- -- -- 
+[  13 ]  ?   chunk(imap): 5 12 -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[  14 ] live k0k0k0k0k0k0k0k0k0k0k0k0k0k0k0k0
+[  15 ]  ?   type:reg size:3 refs:1 ptrs: 8 11 14 -- -- -- -- -- 
+[  16 ]  ?   chunk(imap): 5 15 -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[  17 ] live g0g0g0g0g0g0g0g0g0g0g0g0g0g0g0g0
+[  18 ] live type:reg size:4 refs:1 ptrs: 8 11 14 17 -- -- -- -- 
+[  19 ] live chunk(imap): 5 18 -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
+
+6.
+
+(3ep) swarajd@swarajd-travel:~/prog/systems/3ep/43_log_structured_file_system_LFS$ ./lfs.py -o -L c,/foo:w,/foo,0,4
+
+INITIAL file system contents:
+[   0 ] live checkpoint: 3 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   1 ] live [.,0] [..,0] -- -- -- -- -- -- 
+[   2 ] live type:dir size:1 refs:2 ptrs: 1 -- -- -- -- -- -- -- 
+[   3 ] live chunk(imap): 2 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+
+create file /foo 
+write file  /foo offset=0 size=4 
+
+FINAL file system contents:
+[   0 ] live checkpoint: 13 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   1 ]  ?   [.,0] [..,0] -- -- -- -- -- -- 
+[   2 ]  ?   type:dir size:1 refs:2 ptrs: 1 -- -- -- -- -- -- -- 
+[   3 ]  ?   chunk(imap): 2 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   4 ] live [.,0] [..,0] [foo,1] -- -- -- -- -- 
+[   5 ] live type:dir size:1 refs:2 ptrs: 4 -- -- -- -- -- -- -- 
+[   6 ]  ?   type:reg size:0 refs:1 ptrs: -- -- -- -- -- -- -- -- 
+[   7 ]  ?   chunk(imap): 5 6 -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   8 ] live v0v0v0v0v0v0v0v0v0v0v0v0v0v0v0v0
+[   9 ] live t1t1t1t1t1t1t1t1t1t1t1t1t1t1t1t1
+[  10 ] live k2k2k2k2k2k2k2k2k2k2k2k2k2k2k2k2
+[  11 ] live g3g3g3g3g3g3g3g3g3g3g3g3g3g3g3g3
+[  12 ] live type:reg size:4 refs:1 ptrs: 8 9 10 11 -- -- -- -- 
+[  13 ] live chunk(imap): 5 12 -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+
+The difference is the blocks are all contiguous as opposed to split up.
+
+7.
+
+(3ep) swarajd@swarajd-travel:~/prog/systems/3ep/43_log_structured_file_system_LFS$ ./lfs.py -L c,/foo:w,/foo,0,1
+
+INITIAL file system contents:
+[   0 ] live checkpoint: 3 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   1 ] live [.,0] [..,0] -- -- -- -- -- -- 
+[   2 ] live type:dir size:1 refs:2 ptrs: 1 -- -- -- -- -- -- -- 
+[   3 ] live chunk(imap): 2 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+
+command? create file foo
+command? write  file foo, size:1,offset=0
+
+FINAL file system contents:
+[   0 ]  ?   checkpoint: 10 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   1 ]  ?   [.,0] [..,0] -- -- -- -- -- -- 
+[   2 ]  ?   type:dir size:1 refs:2 ptrs: 1 -- -- -- -- -- -- -- 
+[   3 ]  ?   chunk(imap): 2 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   4 ]  ?   [.,0] [..,0] [foo,1] -- -- -- -- -- 
+[   5 ]  ?   type:dir size:1 refs:2 ptrs: 4 -- -- -- -- -- -- -- 
+[   6 ]  ?   type:reg size:0 refs:1 ptrs: -- -- -- -- -- -- -- -- 
+[   7 ]  ?   chunk(imap): 5 6 -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   8 ]  ?   v0v0v0v0v0v0v0v0v0v0v0v0v0v0v0v0
+[   9 ]  ?   type:reg size:1 refs:1 ptrs: 8 -- -- -- -- -- -- -- 
+[  10 ]  ?   chunk(imap): 5 9 -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+
+(3ep) swarajd@swarajd-travel:~/prog/systems/3ep/43_log_structured_file_system_LFS$ ./lfs.py -L c,/foo:w,/foo,7,1
+
+INITIAL file system contents:
+[   0 ] live checkpoint: 3 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   1 ] live [.,0] [..,0] -- -- -- -- -- -- 
+[   2 ] live type:dir size:1 refs:2 ptrs: 1 -- -- -- -- -- -- -- 
+[   3 ] live chunk(imap): 2 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+
+command? create file foo
+command? write  file foo size=1,offset=7
+
+FINAL file system contents:
+[   0 ]  ?   checkpoint: 10 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   1 ]  ?   [.,0] [..,0] -- -- -- -- -- -- 
+[   2 ]  ?   type:dir size:1 refs:2 ptrs: 1 -- -- -- -- -- -- -- 
+[   3 ]  ?   chunk(imap): 2 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   4 ]  ?   [.,0] [..,0] [foo,1] -- -- -- -- -- 
+[   5 ]  ?   type:dir size:1 refs:2 ptrs: 4 -- -- -- -- -- -- -- 
+[   6 ]  ?   type:reg size:0 refs:1 ptrs: -- -- -- -- -- -- -- -- 
+[   7 ]  ?   chunk(imap): 5 6 -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   8 ]  ?   v0v0v0v0v0v0v0v0v0v0v0v0v0v0v0v0
+[   9 ]  ?   type:reg size:8 refs:1 ptrs: -- -- -- -- -- -- -- 8 
+[  10 ]  ?   chunk(imap): 5 9 -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+
+The difference is the first one has a size of 1, the second one has a size of 8.
+
+8.
+
+(3ep) swarajd@swarajd-travel:~/prog/systems/3ep/43_log_structured_file_system_LFS$ ./lfs.py -L c,/foo
+
+INITIAL file system contents:
+[   0 ] live checkpoint: 3 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   1 ] live [.,0] [..,0] -- -- -- -- -- -- 
+[   2 ] live type:dir size:1 refs:2 ptrs: 1 -- -- -- -- -- -- -- 
+[   3 ] live chunk(imap): 2 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+
+command? 
+
+FINAL file system contents:
+[   0 ]  ?   checkpoint: 7 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   1 ]  ?   [.,0] [..,0] -- -- -- -- -- -- 
+[   2 ]  ?   type:dir size:1 refs:2 ptrs: 1 -- -- -- -- -- -- -- 
+[   3 ]  ?   chunk(imap): 2 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   4 ]  ?   [.,0] [..,0] [foo,1] -- -- -- -- -- 
+[   5 ]  ?   type:dir size:1 refs:2 ptrs: 4 -- -- -- -- -- -- -- 
+[   6 ]  ?   type:reg size:0 refs:1 ptrs: -- -- -- -- -- -- -- -- 
+[   7 ]  ?   chunk(imap): 5 6 -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+
+
+(3ep) swarajd@swarajd-travel:~/prog/systems/3ep/43_log_structured_file_system_LFS$ ./lfs.py -L d,/foo
+
+INITIAL file system contents:
+[   0 ] live checkpoint: 3 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   1 ] live [.,0] [..,0] -- -- -- -- -- -- 
+[   2 ] live type:dir size:1 refs:2 ptrs: 1 -- -- -- -- -- -- -- 
+[   3 ] live chunk(imap): 2 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+
+command? 
+
+FINAL file system contents:
+[   0 ]  ?   checkpoint: 8 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   1 ]  ?   [.,0] [..,0] -- -- -- -- -- -- 
+[   2 ]  ?   type:dir size:1 refs:2 ptrs: 1 -- -- -- -- -- -- -- 
+[   3 ]  ?   chunk(imap): 2 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   4 ]  ?   [.,0] [..,0] [foo,1] -- -- -- -- -- 
+[   5 ]  ?   [.,1] [..,0] -- -- -- -- -- -- 
+[   6 ]  ?   type:dir size:1 refs:3 ptrs: 4 -- -- -- -- -- -- -- 
+[   7 ]  ?   type:dir size:1 refs:2 ptrs: 5 -- -- -- -- -- -- -- 
+[   8 ]  ?   chunk(imap): 6 7 -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+
+Creating a directory writes the newly created directory to a new block, whereas
+for a file it just creates a new reference, but doesn't allocate any memory for
+it yet.
+
+
+9.
+
+(3ep) swarajd@swarajd-travel:~/prog/systems/3ep/43_log_structured_file_system_LFS$ ./lfs.py -L c,/foo:l,/foo,/bar:l,/foo,/goo -o -i
+
+INITIAL file system contents:
+[   0 ] live checkpoint: 3 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   1 ] live [.,0] [..,0] -- -- -- -- -- -- 
+[   2 ] live type:dir size:1 refs:2 ptrs: 1 -- -- -- -- -- -- -- 
+[   3 ] live chunk(imap): 2 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+
+create file /foo 
+
+[   0 ]  ?   checkpoint: 7 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+...
+[   4 ]  ?   [.,0] [..,0] [foo,1] -- -- -- -- -- 
+[   5 ]  ?   type:dir size:1 refs:2 ptrs: 4 -- -- -- -- -- -- -- 
+[   6 ]  ?   type:reg size:0 refs:1 ptrs: -- -- -- -- -- -- -- -- 
+[   7 ]  ?   chunk(imap): 5 6 -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+
+
+link file   /foo /bar 
+
+[   0 ]  ?   checkpoint: 11 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+...
+[   8 ]  ?   [.,0] [..,0] [foo,1] [bar,1] -- -- -- -- 
+[   9 ]  ?   type:dir size:1 refs:2 ptrs: 8 -- -- -- -- -- -- -- 
+[  10 ]  ?   type:reg size:0 refs:2 ptrs: -- -- -- -- -- -- -- -- 
+[  11 ]  ?   chunk(imap): 9 10 -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+
+
+link file   /foo /goo 
+
+[   0 ]  ?   checkpoint: 15 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+...
+[  12 ]  ?   [.,0] [..,0] [foo,1] [bar,1] [goo,1] -- -- -- 
+[  13 ]  ?   type:dir size:1 refs:2 ptrs: 12 -- -- -- -- -- -- -- 
+[  14 ]  ?   type:reg size:0 refs:3 ptrs: -- -- -- -- -- -- -- -- 
+[  15 ]  ?   chunk(imap): 13 14 -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+
+
+
+FINAL file system contents:
+[   0 ]  ?   checkpoint: 15 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   1 ]  ?   [.,0] [..,0] -- -- -- -- -- -- 
+[   2 ]  ?   type:dir size:1 refs:2 ptrs: 1 -- -- -- -- -- -- -- 
+[   3 ]  ?   chunk(imap): 2 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   4 ]  ?   [.,0] [..,0] [foo,1] -- -- -- -- -- 
+[   5 ]  ?   type:dir size:1 refs:2 ptrs: 4 -- -- -- -- -- -- -- 
+[   6 ]  ?   type:reg size:0 refs:1 ptrs: -- -- -- -- -- -- -- -- 
+[   7 ]  ?   chunk(imap): 5 6 -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   8 ]  ?   [.,0] [..,0] [foo,1] [bar,1] -- -- -- -- 
+[   9 ]  ?   type:dir size:1 refs:2 ptrs: 8 -- -- -- -- -- -- -- 
+[  10 ]  ?   type:reg size:0 refs:2 ptrs: -- -- -- -- -- -- -- -- 
+[  11 ]  ?   chunk(imap): 9 10 -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[  12 ]  ?   [.,0] [..,0] [foo,1] [bar,1] [goo,1] -- -- -- 
+[  13 ]  ?   type:dir size:1 refs:2 ptrs: 12 -- -- -- -- -- -- -- 
+[  14 ]  ?   type:reg size:0 refs:3 ptrs: -- -- -- -- -- -- -- -- 
+[  15 ]  ?   chunk(imap): 13 14 -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+
+
+When a hard link is created, the inode is simply updated with an incremented
+reference count, as well as updating the contents of the directory file.
+
+10.
+
+(3ep) swarajd@swarajd-travel:~/prog/systems/3ep/43_log_structured_file_system_LFS$ ./lfs.py -p c100 -n 10 -o -a s
+
+INITIAL file system contents:
+[   0 ] live checkpoint: 3 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   1 ] live [.,0] [..,0] -- -- -- -- -- -- 
+[   2 ] live type:dir size:1 refs:2 ptrs: 1 -- -- -- -- -- -- -- 
+[   3 ] live chunk(imap): 2 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+
+create file /kg5 
+create file /hm5 
+create file /ht6 
+create file /zv9 
+create file /xr4 
+create file /px9 
+create file /gu5 
+create file /kv6 
+create file /wg3 
+create file /og9 
+
+FINAL file system contents:
+[   0 ]  ?   checkpoint: 43 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   1 ]  ?   [.,0] [..,0] -- -- -- -- -- -- 
+[   2 ]  ?   type:dir size:1 refs:2 ptrs: 1 -- -- -- -- -- -- -- 
+[   3 ]  ?   chunk(imap): 2 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   4 ]  ?   [.,0] [..,0] [kg5,1] -- -- -- -- -- 
+[   5 ]  ?   type:dir size:1 refs:2 ptrs: 4 -- -- -- -- -- -- -- 
+[   6 ]  ?   type:reg size:0 refs:1 ptrs: -- -- -- -- -- -- -- -- 
+[   7 ]  ?   chunk(imap): 5 6 -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   8 ]  ?   [.,0] [..,0] [kg5,1] [hm5,2] -- -- -- -- 
+[   9 ]  ?   type:dir size:1 refs:2 ptrs: 8 -- -- -- -- -- -- -- 
+[  10 ]  ?   type:reg size:0 refs:1 ptrs: -- -- -- -- -- -- -- -- 
+[  11 ]  ?   chunk(imap): 9 6 10 -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[  12 ]  ?   [.,0] [..,0] [kg5,1] [hm5,2] [ht6,3] -- -- -- 
+[  13 ]  ?   type:dir size:1 refs:2 ptrs: 12 -- -- -- -- -- -- -- 
+[  14 ]  ?   type:reg size:0 refs:1 ptrs: -- -- -- -- -- -- -- -- 
+[  15 ]  ?   chunk(imap): 13 6 10 14 -- -- -- -- -- -- -- -- -- -- -- -- 
+[  16 ]  ?   [.,0] [..,0] [kg5,1] [hm5,2] [ht6,3] [zv9,4] -- -- 
+[  17 ]  ?   type:dir size:1 refs:2 ptrs: 16 -- -- -- -- -- -- -- 
+[  18 ]  ?   type:reg size:0 refs:1 ptrs: -- -- -- -- -- -- -- -- 
+[  19 ]  ?   chunk(imap): 17 6 10 14 18 -- -- -- -- -- -- -- -- -- -- -- 
+[  20 ]  ?   [.,0] [..,0] [kg5,1] [hm5,2] [ht6,3] [zv9,4] [xr4,5] -- 
+[  21 ]  ?   type:dir size:1 refs:2 ptrs: 20 -- -- -- -- -- -- -- 
+[  22 ]  ?   type:reg size:0 refs:1 ptrs: -- -- -- -- -- -- -- -- 
+[  23 ]  ?   chunk(imap): 21 6 10 14 18 22 -- -- -- -- -- -- -- -- -- -- 
+[  24 ]  ?   [.,0] [..,0] [kg5,1] [hm5,2] [ht6,3] [zv9,4] [xr4,5] [px9,6] 
+[  25 ]  ?   type:dir size:1 refs:2 ptrs: 24 -- -- -- -- -- -- -- 
+[  26 ]  ?   type:reg size:0 refs:1 ptrs: -- -- -- -- -- -- -- -- 
+[  27 ]  ?   chunk(imap): 25 6 10 14 18 22 26 -- -- -- -- -- -- -- -- -- 
+[  28 ]  ?   [gu5,7] -- -- -- -- -- -- -- 
+[  29 ]  ?   type:dir size:2 refs:2 ptrs: 24 28 -- -- -- -- -- -- 
+[  30 ]  ?   type:reg size:0 refs:1 ptrs: -- -- -- -- -- -- -- -- 
+[  31 ]  ?   chunk(imap): 29 6 10 14 18 22 26 30 -- -- -- -- -- -- -- -- 
+[  32 ]  ?   [gu5,7] [kv6,8] -- -- -- -- -- -- 
+[  33 ]  ?   type:dir size:2 refs:2 ptrs: 24 32 -- -- -- -- -- -- 
+[  34 ]  ?   type:reg size:0 refs:1 ptrs: -- -- -- -- -- -- -- -- 
+[  35 ]  ?   chunk(imap): 33 6 10 14 18 22 26 30 34 -- -- -- -- -- -- -- 
+[  36 ]  ?   [gu5,7] [kv6,8] [wg3,9] -- -- -- -- -- 
+[  37 ]  ?   type:dir size:2 refs:2 ptrs: 24 36 -- -- -- -- -- -- 
+[  38 ]  ?   type:reg size:0 refs:1 ptrs: -- -- -- -- -- -- -- -- 
+[  39 ]  ?   chunk(imap): 37 6 10 14 18 22 26 30 34 38 -- -- -- -- -- -- 
+[  40 ]  ?   [gu5,7] [kv6,8] [wg3,9] [og9,10] -- -- -- -- 
+[  41 ]  ?   type:dir size:2 refs:2 ptrs: 24 40 -- -- -- -- -- -- 
+[  42 ]  ?   type:reg size:0 refs:1 ptrs: -- -- -- -- -- -- -- -- 
+[  43 ]  ?   chunk(imap): 41 6 10 14 18 22 26 30 34 38 42 -- -- -- -- --
+
+(3ep) swarajd@swarajd-travel:~/prog/systems/3ep/43_log_structured_file_system_LFS$ ./lfs.py -p c100 -n 10 -o -a r
+
+INITIAL file system contents:
+[   0 ] live checkpoint: 3 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   1 ] live [.,0] [..,0] -- -- -- -- -- -- 
+[   2 ] live type:dir size:1 refs:2 ptrs: 1 -- -- -- -- -- -- -- 
+[   3 ] live chunk(imap): 2 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+
+create file /kg5 
+create file /hm5 
+create file /ht6 
+create file /zv9 
+create file /xr4 
+create file /px9 
+create file /gu5 
+create file /kv6 
+create file /wg3 
+create file /og9 
+
+FINAL file system contents:
+[   0 ]  ?   checkpoint: 52 38 -- -- -- 23 -- 13 53 -- -- 48 8 -- 33 -- 
+[   1 ]  ?   [.,0] [..,0] -- -- -- -- -- -- 
+[   2 ]  ?   type:dir size:1 refs:2 ptrs: 1 -- -- -- -- -- -- -- 
+[   3 ]  ?   chunk(imap): 2 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   4 ]  ?   [.,0] [..,0] [kg5,205] -- -- -- -- -- 
+[   5 ]  ?   type:dir size:1 refs:2 ptrs: 4 -- -- -- -- -- -- -- 
+[   6 ]  ?   type:reg size:0 refs:1 ptrs: -- -- -- -- -- -- -- -- 
+[   7 ]  ?   chunk(imap): 5 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   8 ]  ?   chunk(imap): -- -- -- -- -- -- -- -- -- -- -- -- -- 6 -- -- 
+[   9 ]  ?   [.,0] [..,0] [kg5,205] [hm5,114] -- -- -- -- 
+[  10 ]  ?   type:dir size:1 refs:2 ptrs: 9 -- -- -- -- -- -- -- 
+[  11 ]  ?   type:reg size:0 refs:1 ptrs: -- -- -- -- -- -- -- -- 
+[  12 ]  ?   chunk(imap): 10 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[  13 ]  ?   chunk(imap): -- -- 11 -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[  14 ]  ?   [.,0] [..,0] [kg5,205] [hm5,114] [ht6,20] -- -- -- 
+[  15 ]  ?   type:dir size:1 refs:2 ptrs: 14 -- -- -- -- -- -- -- 
+[  16 ]  ?   type:reg size:0 refs:1 ptrs: -- -- -- -- -- -- -- -- 
+[  17 ]  ?   chunk(imap): 15 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[  18 ]  ?   chunk(imap): -- -- -- -- 16 -- -- -- -- -- -- -- -- -- -- -- 
+[  19 ]  ?   [.,0] [..,0] [kg5,205] [hm5,114] [ht6,20] [zv9,81] -- -- 
+[  20 ]  ?   type:dir size:1 refs:2 ptrs: 19 -- -- -- -- -- -- -- 
+[  21 ]  ?   type:reg size:0 refs:1 ptrs: -- -- -- -- -- -- -- -- 
+[  22 ]  ?   chunk(imap): 20 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[  23 ]  ?   chunk(imap): -- 21 -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[  24 ]  ?   [.,0] [..,0] [kg5,205] [hm5,114] [ht6,20] [zv9,81] [xr4,130] -- 
+[  25 ]  ?   type:dir size:1 refs:2 ptrs: 24 -- -- -- -- -- -- -- 
+[  26 ]  ?   type:reg size:0 refs:1 ptrs: -- -- -- -- -- -- -- -- 
+[  27 ]  ?   chunk(imap): 25 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[  28 ]  ?   chunk(imap): -- -- 26 -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[  29 ]  ?   [.,0] [..,0] [kg5,205] [hm5,114] [ht6,20] [zv9,81] [xr4,130] [px9,238] 
+[  30 ]  ?   type:dir size:1 refs:2 ptrs: 29 -- -- -- -- -- -- -- 
+[  31 ]  ?   type:reg size:0 refs:1 ptrs: -- -- -- -- -- -- -- -- 
+[  32 ]  ?   chunk(imap): 30 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[  33 ]  ?   chunk(imap): -- -- -- -- -- -- -- -- -- -- -- -- -- -- 31 -- 
+[  34 ]  ?   [gu5,27] -- -- -- -- -- -- -- 
+[  35 ]  ?   type:dir size:2 refs:2 ptrs: 29 34 -- -- -- -- -- -- 
+[  36 ]  ?   type:reg size:0 refs:1 ptrs: -- -- -- -- -- -- -- -- 
+[  37 ]  ?   chunk(imap): 35 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[  38 ]  ?   chunk(imap): -- -- -- -- 16 -- -- -- -- -- -- 36 -- -- -- -- 
+[  39 ]  ?   [gu5,27] [kv6,141] -- -- -- -- -- -- 
+[  40 ]  ?   type:dir size:2 refs:2 ptrs: 29 39 -- -- -- -- -- -- 
+[  41 ]  ?   type:reg size:0 refs:1 ptrs: -- -- -- -- -- -- -- -- 
+[  42 ]  ?   chunk(imap): 40 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[  43 ]  ?   chunk(imap): -- -- 26 -- -- -- -- -- -- -- -- -- -- 41 -- -- 
+[  44 ]  ?   [gu5,27] [kv6,141] [wg3,180] -- -- -- -- -- 
+[  45 ]  ?   type:dir size:2 refs:2 ptrs: 29 44 -- -- -- -- -- -- 
+[  46 ]  ?   type:reg size:0 refs:1 ptrs: -- -- -- -- -- -- -- -- 
+[  47 ]  ?   chunk(imap): 45 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[  48 ]  ?   chunk(imap): -- -- -- -- 46 -- -- -- -- -- -- -- -- -- -- -- 
+[  49 ]  ?   [gu5,27] [kv6,141] [wg3,180] [og9,140] -- -- -- -- 
+[  50 ]  ?   type:dir size:2 refs:2 ptrs: 29 49 -- -- -- -- -- -- 
+[  51 ]  ?   type:reg size:0 refs:1 ptrs: -- -- -- -- -- -- -- -- 
+[  52 ]  ?   chunk(imap): 50 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[  53 ]  ?   chunk(imap): -- -- 26 -- -- -- -- -- -- -- -- -- 51 41 -- -- 
+
+
+Using the sequential policy uses less blocks in total than the random policy.
+
+11.
+
+(3ep) swarajd@swarajd-travel:~/prog/systems/3ep/43_log_structured_file_system_LFS$ ./lfs.py -N -i -o -s 1001
+
+INITIAL file system contents:
+[   0 ] live checkpoint: 3 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   1 ] live [.,0] [..,0] -- -- -- -- -- -- 
+[   2 ] live type:dir size:1 refs:2 ptrs: 1 -- -- -- -- -- -- -- 
+[   3 ] live chunk(imap): 2 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+
+create file /wc9 
+
+[   4 ]  ?   [.,0] [..,0] [wc9,1] -- -- -- -- -- 
+[   5 ]  ?   type:dir size:1 refs:2 ptrs: 4 -- -- -- -- -- -- -- 
+[   6 ]  ?   type:reg size:0 refs:1 ptrs: -- -- -- -- -- -- -- -- 
+[   7 ]  ?   chunk(imap): 5 6 -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+
+
+delete file /wc9 
+
+[   8 ]  ?   [.,0] [..,0] -- -- -- -- -- -- 
+[   9 ]  ?   type:dir size:1 refs:2 ptrs: 8 -- -- -- -- -- -- -- 
+[  10 ]  ?   chunk(imap): 9 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+
+
+create dir  /op0 
+
+[  11 ]  ?   [.,0] [..,0] [op0,1] -- -- -- -- -- 
+[  12 ]  ?   [.,1] [..,0] -- -- -- -- -- -- 
+[  13 ]  ?   type:dir size:1 refs:3 ptrs: 11 -- -- -- -- -- -- -- 
+[  14 ]  ?   type:dir size:1 refs:2 ptrs: 12 -- -- -- -- -- -- -- 
+[  15 ]  ?   chunk(imap): 13 14 -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+
+
+
+FINAL file system contents:
+[   0 ]  ?   checkpoint: 3 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   1 ]  ?   [.,0] [..,0] -- -- -- -- -- -- 
+[   2 ]  ?   type:dir size:1 refs:2 ptrs: 1 -- -- -- -- -- -- -- 
+[   3 ]  ?   chunk(imap): 2 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   4 ]  ?   [.,0] [..,0] [wc9,1] -- -- -- -- -- 
+[   5 ]  ?   type:dir size:1 refs:2 ptrs: 4 -- -- -- -- -- -- -- 
+[   6 ]  ?   type:reg size:0 refs:1 ptrs: -- -- -- -- -- -- -- -- 
+[   7 ]  ?   chunk(imap): 5 6 -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[   8 ]  ?   [.,0] [..,0] -- -- -- -- -- -- 
+[   9 ]  ?   type:dir size:1 refs:2 ptrs: 8 -- -- -- -- -- -- -- 
+[  10 ]  ?   chunk(imap): 9 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+[  11 ]  ?   [.,0] [..,0] [op0,1] -- -- -- -- -- 
+[  12 ]  ?   [.,1] [..,0] -- -- -- -- -- -- 
+[  13 ]  ?   type:dir size:1 refs:3 ptrs: 11 -- -- -- -- -- -- -- 
+[  14 ]  ?   type:dir size:1 refs:2 ptrs: 12 -- -- -- -- -- -- -- 
+[  15 ]  ?   chunk(imap): 13 14 -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+
+
+If the checkpoint were never updated, you would have to walk block by block
+in the log and play each command from the last block the checkpoint refers to.
+The strategy behind this would most likely be read the blocks until you hit an 
+imap, and then write all those changes to disk, and continue until the end of
+the log.
