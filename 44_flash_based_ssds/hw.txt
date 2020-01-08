@@ -1,0 +1,468 @@
+1.
+
+(3ep) swarajd@swarajd-travel:~/prog/systems/3ep/44_flash_based_ssds$ ./ssd.py -T log -s 1 -n 10 -q
+ARG seed 1
+ARG num_cmds 10
+ARG op_percentages 40/50/10
+ARG skew 
+ARG skew_start 0
+ARG read_fail 0
+ARG cmd_list 
+ARG ssd_type log
+ARG num_logical_pages 80
+ARG num_blocks 12
+ARG pages_per_block 10
+ARG high_water_mark 10
+ARG low_water_mark 8
+ARG erase_time 1000
+ARG program_time 40
+ARG read_time 10
+ARG show_gc False
+ARG show_state False
+ARG show_cmds False
+ARG quiz_cmds True
+ARG show_stats False
+ARG compute False
+
+FTL   (empty)
+Block 0          1          2          3          4          5          6          7          8          9          10         11         
+Page  0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 1111111111 1111111111 
+      0000000000 1111111111 2222222222 3333333333 4444444444 5555555555 6666666666 7777777777 8888888888 9999999999 0000000000 1111111111 
+      0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 
+State iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii 
+Data                                                                                                                                      
+Live                                                                                                                                      
+
+cmd   0:: command(write(20, u)) -> success
+
+FTL    20:  0 
+Block 0          1          2          3          4          5          6          7          8          9          10         11         
+Page  0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 1111111111 1111111111 
+      0000000000 1111111111 2222222222 3333333333 4444444444 5555555555 6666666666 7777777777 8888888888 9999999999 0000000000 1111111111 
+      0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 
+State vEEEEEEEEE iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii 
+Data  u                                                                                                                                   
+Live  +                                                                                                                                   
+
+cmd   1:: command(write(52,M)) -> success 
+
+FTL    20:  0  52:  1 
+Block 0          1          2          3          4          5          6          7          8          9          10         11         
+Page  0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 1111111111 1111111111 
+      0000000000 1111111111 2222222222 3333333333 4444444444 5555555555 6666666666 7777777777 8888888888 9999999999 0000000000 1111111111 
+      0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 
+State vvEEEEEEEE iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii 
+Data  uM                                                                                                                                  
+Live  ++                                                                                                                                  
+
+cmd   2:: read(52) -> M
+
+FTL    20:  0  52:  1 
+Block 0          1          2          3          4          5          6          7          8          9          10         11         
+Page  0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 1111111111 1111111111 
+      0000000000 1111111111 2222222222 3333333333 4444444444 5555555555 6666666666 7777777777 8888888888 9999999999 0000000000 1111111111 
+      0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 
+State vvEEEEEEEE iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii 
+Data  uM                                                                                                                                  
+Live  ++                                                                                                                                  
+
+cmd   3:: command(write(60,0)) -> success
+
+FTL    20:  0  52:  1  60:  2 
+Block 0          1          2          3          4          5          6          7          8          9          10         11         
+Page  0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 1111111111 1111111111 
+      0000000000 1111111111 2222222222 3333333333 4444444444 5555555555 6666666666 7777777777 8888888888 9999999999 0000000000 1111111111 
+      0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 
+State vvvEEEEEEE iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii 
+Data  uM0                                                                                                                                 
+Live  +++                                                                                                                                 
+
+cmd   4:: command(write(57,e)) -> success  
+
+FTL    20:  0  52:  1  57:  3  60:  2 
+Block 0          1          2          3          4          5          6          7          8          9          10         11         
+Page  0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 1111111111 1111111111 
+      0000000000 1111111111 2222222222 3333333333 4444444444 5555555555 6666666666 7777777777 8888888888 9999999999 0000000000 1111111111 
+      0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 
+State vvvvEEEEEE iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii 
+Data  uM0e                                                                                                                                
+Live  ++++                                                                                                                                
+
+cmd 5:: trim(57) -> success 
+
+FTL    20:  0  52:  1  60:  2 
+Block 0          1          2          3          4          5          6          7          8          9          10         11         
+Page  0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 1111111111 1111111111 
+      0000000000 1111111111 2222222222 3333333333 4444444444 5555555555 6666666666 7777777777 8888888888 9999999999 0000000000 1111111111 
+      0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 
+State vvvvEEEEEE iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii 
+Data  uM0e                                                                                                                                
+Live  +++                                                                                                                                 
+
+cmd   6:: read(52) -> M
+
+FTL    20:  0  52:  1  60:  2 
+Block 0          1          2          3          4          5          6          7          8          9          10         11         
+Page  0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 1111111111 1111111111 
+      0000000000 1111111111 2222222222 3333333333 4444444444 5555555555 6666666666 7777777777 8888888888 9999999999 0000000000 1111111111 
+      0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 
+State vvvvEEEEEE iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii 
+Data  uM0e                                                                                                                                
+Live  +++                                                                                                                                 
+
+cmd 7:: command(trim(52)) -> success
+
+FTL    20:  0  60:  2 
+Block 0          1          2          3          4          5          6          7          8          9          10         11         
+Page  0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 1111111111 1111111111 
+      0000000000 1111111111 2222222222 3333333333 4444444444 5555555555 6666666666 7777777777 8888888888 9999999999 0000000000 1111111111 
+      0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 
+State vvvvEEEEEE iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii 
+Data  uM0e                                                                                                                                
+Live  + +                                                                                                                                 
+
+cmd   8:: read(20) -> u
+
+FTL    20:  0  60:  2 
+Block 0          1          2          3          4          5          6          7          8          9          10         11         
+Page  0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 1111111111 1111111111 
+      0000000000 1111111111 2222222222 3333333333 4444444444 5555555555 6666666666 7777777777 8888888888 9999999999 0000000000 1111111111 
+      0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 
+State vvvvEEEEEE iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii 
+Data  uM0e                                                                                                                                
+Live  + +                                                                                                                                 
+
+cmd   9:: read(20) -> u
+
+FTL    20:  0  60:  2 
+Block 0          1          2          3          4          5          6          7          8          9          10         11         
+Page  0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 1111111111 1111111111 
+      0000000000 1111111111 2222222222 3333333333 4444444444 5555555555 6666666666 7777777777 8888888888 9999999999 0000000000 1111111111 
+      0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 
+State vvvvEEEEEE iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii 
+Data  uM0e                                                                                                                                
+Live  + +  
+
+
+
+2.
+
+(3ep) swarajd@swarajd-travel:~/prog/systems/3ep/44_flash_based_ssds$ ./ssd.py -T log -s 2 -n 10 -C
+ARG seed 2
+ARG num_cmds 10
+ARG op_percentages 40/50/10
+ARG skew 
+ARG skew_start 0
+ARG read_fail 0
+ARG cmd_list 
+ARG ssd_type log
+ARG num_logical_pages 80
+ARG num_blocks 12
+ARG pages_per_block 10
+ARG high_water_mark 10
+ARG low_water_mark 8
+ARG erase_time 1000
+ARG program_time 40
+ARG read_time 10
+ARG show_gc False
+ARG show_state False
+ARG show_cmds True
+ARG quiz_cmds False
+ARG show_stats False
+ARG compute False
+
+FTL   (empty)
+Block 0          1          2          3          4          5          6          7          8          9          10         11         
+Page  0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 1111111111 1111111111 
+      0000000000 1111111111 2222222222 3333333333 4444444444 5555555555 6666666666 7777777777 8888888888 9999999999 0000000000 1111111111 
+      0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 
+State iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii 
+Data                                                                                                                                      
+Live                                                                                                                                      
+
+cmd   0:: write(58, F) -> success
+cmd   1:: write(46, 9) -> success
+cmd   2:: write(31, I) -> success
+cmd   3:: trim(31) -> success
+cmd   4:: write(35, g) -> success
+cmd   5:: read(46) -> 9
+cmd   6:: read(35) -> g
+cmd   7:: write(44, e) -> success
+cmd   8:: read(58) -> F
+cmd   9:: write(79, F) -> success
+
+0,F,+
+
+0,F,+;1,9,+
+
+0,F,+;1,9,+;2,I,+
+
+0,F,+;1,9,+;2,I,_
+
+0,F,+;1,9,+;2,I,_;3,g,+
+
+0,F,+;1,9,+;2,I,_;3,g,+
+
+0,F,+;1,9,+;2,I,_;3,g,+
+
+0,F,+;1,9,+;2,I,_;3,g,+;4,e,+
+
+0,F,+;1,9,+;2,I,_;3,g,+;4,e,+
+
+0,F,+;1,9,+;2,I,_;3,g,+;4,e,+;5,F,+
+
+FTL    35:  3  44:  4  46:  1  58:  0  79:  5 
+Block 0          1          2          3          4          5          6          7          8          9          10         11         
+Page  0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 1111111111 1111111111 
+      0000000000 1111111111 2222222222 3333333333 4444444444 5555555555 6666666666 7777777777 8888888888 9999999999 0000000000 1111111111 
+      0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 
+State vvvvvvEEEE iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii 
+Data  F9IgeF                                                                                                                              
+Live  ++ +++ 
+
+3.
+
+Same states, the failed read doesn't change the state.
+
+4.
+
+1000 + 40 + 
+40 +
+10 + 
+40 +
+40 +
+10 +
+10 +
+10
+
+1200
+
+5.
+
+1000 + 40 + 
+1000 + 40 +
+10 + 
+40 + (1000 + 10 +)
+1000 + 40 +
+10 + 
+10 +
+10
+
+4250
+
+The log structured approach worked MUCH better than the direct approach.
+
+6.
+
+There will be a lot of garbage left on the ssd.
+
+7.
+
+If the low watermark is 2, and the high watermark is 5, the disk is used pretty
+efficiently.
+
+8.
+
+LOG:
+
+with gc:
+
+Logical Operation Sums
+  Write count 4436 (0 failed)
+  Read count  374 (0 failed)
+  Trim count  106 (0 failed)
+
+Times
+  Erase time 450000.00
+  Write time 177440.00
+  Read time  42900.00
+  Total time 670340.00
+
+Block 0          1          2          3          4          5          6          7          8          9          10         11         
+Page  0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 1111111111 1111111111 
+      0000000000 1111111111 2222222222 3333333333 4444444444 5555555555 6666666666 7777777777 8888888888 9999999999 0000000000 1111111111 
+      0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 
+State EEEEEEEEEE EEEEEEEEEE vvvvvvvvvv vvvvvvvvvv vvvvvvEEEE EEEEEEEEEE EEEEEEEEEE vvvvvvvvvv EEEEEEEEEE EEEEEEEEEE vvvvvvvvvv vvvvvvvvvv 
+Data                        eYY44bEfAO V5TC4SW7f6 OPF5Hh                           Bn2sOSDm7M                       MhAsmgzfmN eOvr6pp7WE 
+Live                        ++++++++++ ++++++++++ ++++++                           ++++++++++                       ++++++++++ ++++++++++
+
+without gc:
+
+Logical Operation Sums
+  Write count 838 (0 failed)
+  Read count  374 (0 failed)
+  Trim count  106 (0 failed)
+
+Times
+  Erase time 87000.00
+  Write time 33520.00
+  Read time  6920.00
+  Total time 127440.00
+
+Block 0          1          2          3          4          5          6          7          8          9          10         11         
+Page  0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 1111111111 1111111111 
+      0000000000 1111111111 2222222222 3333333333 4444444444 5555555555 6666666666 7777777777 8888888888 9999999999 0000000000 1111111111 
+      0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 
+State EEEEEEEEEE EEEEEEEEEE EEEEEEEEEE vvvvvvvvvv vvvvvvvvvv vvvvvvvvvv vvvvvvvvvv vvvvvvvvvv vvvvvvvvvv vvvvvvvvvv vvvvvvvvvv vvvvvvvvEE 
+Data                                   E8W676fr7m Aq9OSAcMX5 SgFOprW4CL Hor0JOnesH ms8DhFBpeU h262sSV54O x4P4bYYEz0 6DAmWvTHfp h77EZNMf   
+Live                                     ++  ++++    + + + + ++ ++  ++       +++ + ++ + ++ +  +  +++++ +  ++++++++  + +++++ ++ ++++ +++   
+
+
+The gc version executes a lot more operations, but it has double the amount of
+free blocks.
+
+
+DIRECT:
+
+Logical Operation Sums
+  Write count 520 (0 failed)
+  Read count  374 (0 failed)
+  Trim count  106 (0 failed)
+
+Times
+  Erase time 520000.00
+  Write time 177520.00
+  Read time  47320.00
+  Total time 744840.00
+
+Block 0          1          2          3          4          5          6          7          8          9          10         11         
+Page  0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 1111111111 1111111111 
+      0000000000 1111111111 2222222222 3333333333 4444444444 5555555555 6666666666 7777777777 8888888888 9999999999 0000000000 1111111111 
+      0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 
+State vvvvvvvvvv vvvvvvvvvv vvvvvvvvvv vvvvvvvvvv vvvvvvvvvv vvvvvvvvvv vvvvvvvvvv vvvvvvvvvv iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii 
+Data  C7pVaevW6O 7YpEOPS5ON gd4k2Zs8Oh DmAShqM57n 9YPWmXBsz4 Fc3IrWfESf ehV4Am4M6L AxfHcbMrvT                                             
+Live  ++++ +++++ ++++++++++ + + + + ++ +++ + ++++  + ++ ++++ +   + ++++ +  + +  +  + ++ ++  +                                                                                        
+
+
+even with the gc, it still outperforms direct mapping, and has more blocks free
+
+9.
+
+DIRECT:
+
+(3ep) swarajd@swarajd-travel:~/prog/systems/3ep/44_flash_based_ssds$ ./ssd.py -T direct -n 1000 -K 80/20 -S
+ARG seed 0
+ARG num_cmds 1000
+ARG op_percentages 40/50/10
+ARG skew 80/20
+ARG skew_start 0
+ARG read_fail 0
+ARG cmd_list 
+ARG ssd_type direct
+ARG num_logical_pages 80
+ARG num_blocks 12
+ARG pages_per_block 10
+ARG high_water_mark 10
+ARG low_water_mark 8
+ARG erase_time 1000
+ARG program_time 40
+ARG read_time 10
+ARG show_gc False
+ARG show_state False
+ARG show_cmds False
+ARG quiz_cmds False
+ARG show_stats True
+ARG compute False
+
+FTL   (empty)
+Block 0          1          2          3          4          5          6          7          8          9          10         11         
+Page  0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 1111111111 1111111111 
+      0000000000 1111111111 2222222222 3333333333 4444444444 5555555555 6666666666 7777777777 8888888888 9999999999 0000000000 1111111111 
+      0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 
+State iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii 
+Data                                                                                                                                      
+Live                                                                                                                                      
+
+
+FTL     0:  0   1:  1   2:  2   3:  3   4:  4   5:  5   6:  6   7:  7   8:  8   9:  9  10: 10  11: 11  12: 12  13: 13  14: 14  15: 15  25: 25 
+       26: 26  27: 27  28: 28  32: 32  33: 33  36: 36  38: 38  40: 40  44: 44  47: 47  49: 49  55: 55  58: 58  59: 59  66: 66  70: 70  73: 73 
+       77: 77 
+Block 0          1          2          3          4          5          6          7          8          9          10         11         
+Page  0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 1111111111 1111111111 
+      0000000000 1111111111 2222222222 3333333333 4444444444 5555555555 6666666666 7777777777 8888888888 9999999999 0000000000 1111111111 
+      0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 
+State vvvvvvvvvv vvvvvvvvEv vEEEvvvvvE Evvvvvvvvv vvvvvEEvvv vEvEEvEvvv vvEvEvvEEv vEEvvvvvvE iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii 
+Data  JzJKp5K61o Xd9rcPgq G S   JNXtf   V45r0x9d6 WTH8s  DA4 n C  N W5p l6 E MJ  L J  Dpe0Ez                                              
+Live  ++++++++++ ++++++          ++++    ++  + +  +   +  + +      +  ++       +    +  +   +                                               
+
+Physical Operations Per Block
+Erases 257        189         15         12         14          9         11         13          0          0          0          0          Sum: 520
+Writes 2474        1531         58         68         74         32         47         63          0          0          0          0          Sum: 4347
+Reads  2568        1620         90         91        112         54         52         79          0          0          0          0          Sum: 4666
+
+Logical Operation Sums
+  Write count 520 (0 failed)
+  Read count  380 (0 failed)
+  Trim count  100 (0 failed)
+
+Times
+  Erase time 520000.00
+  Write time 173880.00
+  Read time  46660.00
+  Total time 740540.00
+
+LOG:
+
+(3ep) swarajd@swarajd-travel:~/prog/systems/3ep/44_flash_based_ssds$ ./ssd.py -T log -n 1000 -K 80/20 -S
+ARG seed 0
+ARG num_cmds 1000
+ARG op_percentages 40/50/10
+ARG skew 80/20
+ARG skew_start 0
+ARG read_fail 0
+ARG cmd_list 
+ARG ssd_type log
+ARG num_logical_pages 80
+ARG num_blocks 12
+ARG pages_per_block 10
+ARG high_water_mark 10
+ARG low_water_mark 8
+ARG erase_time 1000
+ARG program_time 40
+ARG read_time 10
+ARG show_gc False
+ARG show_state False
+ARG show_cmds False
+ARG quiz_cmds False
+ARG show_stats True
+ARG compute False
+
+FTL   (empty)
+Block 0          1          2          3          4          5          6          7          8          9          10         11         
+Page  0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 1111111111 1111111111 
+      0000000000 1111111111 2222222222 3333333333 4444444444 5555555555 6666666666 7777777777 8888888888 9999999999 0000000000 1111111111 
+      0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 
+State iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii 
+Data                                                                                                                                      
+Live                                                                                                                                      
+
+
+FTL     0: 64   1: 48   2:101   3:104   4: 88   5: 82   6: 90   7: 95   8: 65   9: 99  10: 78  11: 77  12:105  13:106  14: 83  15:102  25: 63 
+       26:100  27: 26  28: 71  32:103  33: 24  36: 92  38: 54  40: 34  44: 33  47: 59  49: 91  55: 87  58: 55  59: 69  66: 93  70: 98  73: 94 
+       77: 96 
+Block 0          1          2          3          4          5          6          7          8          9          10         11         
+Page  0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 1111111111 1111111111 
+      0000000000 1111111111 2222222222 3333333333 4444444444 5555555555 6666666666 7777777777 8888888888 9999999999 0000000000 1111111111 
+      0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 
+State EEEEEEEEEE EEEEEEEEEE vvvvvvvvvv vvvvvvvvvv vvvvvvvvvv vvvvvvvvvv vvvvvvvvvv vvvvvvvvvv vvvvvvvvvv vvvvvvvvvv vvvvvvvEEE EEEEEEEEEE 
+Data                        VfvL5uttMI ThMsWdc8SZ pL865L53zH pYt1d50IND g3xNJ1JEpp VfqVikpdXW F85cI3JNpB K4xJD6ESJo XJP4K9r               
+Live                            + +       ++              +      ++   +    +++   +  +     ++    ++   ++  +++++++ ++ +++++++               
+
+Physical Operations Per Block
+Erases   6          6          5          5          5          5          5          5          5          5          5          5          Sum: 62
+Writes  50         50         50         50         50         50         50         50         50         50         47         40          Sum: 587
+Reads   30         46         46         34         30         40         46         36         36         40         24         39          Sum: 447
+
+Logical Operation Sums
+  Write count 587 (0 failed)
+  Read count  380 (0 failed)
+  Trim count  100 (0 failed)
+
+Times
+  Erase time 62000.00
+  Write time 23480.00
+  Read time  4470.00
+  Total time 89950.00
+
+
+log based reduces erase,write,read by almost a whole magnitude.
