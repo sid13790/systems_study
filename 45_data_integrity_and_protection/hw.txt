@@ -1,0 +1,217 @@
+1.
+
+(3ep) swarajd@swarajd-travel:~/prog/systems/3ep/45_data_integrity_and_protection$ ./checksum.py 
+
+OPTIONS seed 0
+OPTIONS data_size 4
+OPTIONS data 
+
+Decimal:          216        194        107         66 
+Hex:             0xd8       0xc2       0x6b       0x42 
+Bin:       0b11011000 0b11000010 0b01101011 0b01000010 
+
+add
+0b11011000
+0b11000010
+----------
+0b10011010
+0b01101011
+----------
+0b00000101
+0b01000010
+----------
+0b01000111
+
+xor
+0b11011000
+0b11000010
+0b01101011
+0b01000010
+----------
+0b00110011
+
+fletcher
+s1 = 216, s2 = 216
+s1 = 410, s2 = 626
+s1 = 517, s2 = 1143 
+s1 = 583, s2 = 1726
+
+s1 = 73, s2 = 196
+
+Add:      71
+Xor:      51
+Fletcher: s1 = 73, s2 = 196
+
+2.
+
+nah lol
+
+3.
+
+(3ep) swarajd@swarajd-travel:~/prog/systems/3ep/45_data_integrity_and_protection$ ./checksum.py -D 10,5,160,80 -c
+
+OPTIONS seed 0
+OPTIONS data_size 4
+OPTIONS data 10,5,160,80
+
+Decimal:           10          5        160         80 
+Hex:             0x0a       0x05       0xa0       0x50 
+Bin:       0b00001010 0b00000101 0b10100000 0b01010000 
+
+Add:            255       (0b11111111)
+Xor:            255       (0b11111111)
+Fletcher(a,b):    0,200   (0b00000000,0b11001000)
+
+
+This typically happens when there is no carryover in the additive operation.
+
+4.
+
+(3ep) swarajd@swarajd-travel:~/prog/systems/3ep/45_data_integrity_and_protection$ ./checksum.py -D 1,2,3,4 -c
+
+OPTIONS seed 0
+OPTIONS data_size 4
+OPTIONS data 1,2,3,4
+
+Decimal:            1          2          3          4 
+Hex:             0x01       0x02       0x03       0x04 
+Bin:       0b00000001 0b00000010 0b00000011 0b00000100 
+
+Add:             10       (0b00001010)
+Xor:              4       (0b00000100)
+Fletcher(a,b):   10, 20   (0b00001010,0b00010100)
+
+
+This happens when there IS carryover at any point during the additive operation
+
+5.
+
+(3ep) swarajd@swarajd-travel:~/prog/systems/3ep/45_data_integrity_and_protection$ ./checksum.py -D 129,130,131,132 -c
+
+OPTIONS seed 0
+OPTIONS data_size 4
+OPTIONS data 129,130,131,132
+
+Decimal:          129        130        131        132 
+Hex:             0x81       0x82       0x83       0x84 
+Bin:       0b10000001 0b10000010 0b10000011 0b10000100 
+
+Add:             10       (0b00001010)
+Xor:              4       (0b00000100)
+Fletcher(a,b):   12, 25   (0b00001100,0b00011001)
+
+(3ep) swarajd@swarajd-travel:~/prog/systems/3ep/45_data_integrity_and_protection$ ./checksum.py -D 1,2,3,4 -c
+
+OPTIONS seed 0
+OPTIONS data_size 4
+OPTIONS data 1,2,3,4
+
+Decimal:            1          2          3          4 
+Hex:             0x01       0x02       0x03       0x04 
+Bin:       0b00000001 0b00000010 0b00000011 0b00000100 
+
+Add:             10       (0b00001010)
+Xor:              4       (0b00000100)
+Fletcher(a,b):   10, 20   (0b00001010,0b00010100)
+
+The additive checksums will be the same when the carryovers don't have an impact
+on the final sum, or when the carryovers have the same impact in both sums.
+
+6.
+
+10101010,170
+01010101,85
+11110000,240
+00001111,15
+--------
+00000000
+
+11010101,213
+00101010,42
+01010100,84
+10101011,171
+--------
+00000000
+
+(3ep) swarajd@swarajd-travel:~/prog/systems/3ep/45_data_integrity_and_protection$ ./checksum.py -D 170,85,240,15 -c
+
+OPTIONS seed 0
+OPTIONS data_size 4
+OPTIONS data 170,85,240,15
+
+Decimal:          170         85        240         15 
+Hex:             0xaa       0x55       0xf0       0x0f 
+Bin:       0b10101010 0b01010101 0b11110000 0b00001111 
+
+Add:            254       (0b11111110)
+Xor:              0       (0b00000000)
+Fletcher(a,b):    0,155   (0b00000000,0b10011011)
+
+
+(3ep) swarajd@swarajd-travel:~/prog/systems/3ep/45_data_integrity_and_protection$ ./checksum.py -D 213,42,84,171 -c
+
+OPTIONS seed 0
+OPTIONS data_size 4
+OPTIONS data 213,42,84,171
+
+Decimal:          213         42         84        171 
+Hex:             0xd5       0x2a       0x54       0xab 
+Bin:       0b11010101 0b00101010 0b01010100 0b10101011 
+
+Add:            254       (0b11111110)
+Xor:              0       (0b00000000)
+Fletcher(a,b):    0, 42   (0b00000000,0b00101010)
+
+XORs are typically the same when the individual bits each all XOR to the same 
+value. So if two blocks have two bits in the same position swapped, then there
+might be a corruption, but it's still valid to XOR.
+
+7.
+
+(3ep) swarajd@swarajd-travel:~/prog/systems/3ep/45_data_integrity_and_protection$ ./checksum.py -D 1,2,3,4 -c
+
+OPTIONS seed 0
+OPTIONS data_size 4
+OPTIONS data 1,2,3,4
+
+Decimal:            1          2          3          4 
+Hex:             0x01       0x02       0x03       0x04 
+Bin:       0b00000001 0b00000010 0b00000011 0b00000100 
+
+Add:             10       (0b00001010)
+Xor:              4       (0b00000100)
+Fletcher(a,b):   10, 20   (0b00001010,0b00010100)
+
+(3ep) swarajd@swarajd-travel:~/prog/systems/3ep/45_data_integrity_and_protection$ ./checksum.py -D 4,3,2,1 -c
+
+OPTIONS seed 0
+OPTIONS data_size 4
+OPTIONS data 4,3,2,1
+
+Decimal:            4          3          2          1 
+Hex:             0x04       0x03       0x02       0x01 
+Bin:       0b00000100 0b00000011 0b00000010 0b00000001 
+
+Add:             10       (0b00001010)
+Xor:              4       (0b00000100)
+Fletcher(a,b):   10, 30   (0b00001010,0b00011110)
+
+
+The add and XOR are both the same, BUT the fletcher is different. Fletcher is
+better because the order affects the final value of the fletcher checksum. The
+order matters because the higher the initial fletcher s2 value is, the higher
+the final s2 value will be, so it takes into account the values themselves, AND
+the order.
+
+8.
+
+0,1,2,3
+
+255,1,2,3
+
+it happens (at least) when two values have the same mod in the first position,
+or when the four values add up to a number that mods down to the same number.
+
+
+
+
